@@ -8,7 +8,8 @@ import {
 } from 'native-base'
 import ImageAutoChange from '../../../component/imageslider/ImageAutoChange';
 import { stylesglobe } from '../../../constant/styles';
-import CardHorizontal from '../../../component/cardhorizontal/CardHorizontal';
+import CardHorizontal from '../../../component/list/CardHorizontal';
+import VerticalList from '../../../component/list/VerticalList';
 
 
 const height = Dimensions.get("window").height
@@ -16,22 +17,13 @@ export default class Home extends Component {
     constructor() {
         super() 
         this.state = {
-            dataCard :  [{
-                title: 'The Secret of Angel',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-          }, {
-                title: 'Pasutri Gaje',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-          }, {
-                title: 'Young Mom',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-          }]
+
         }
     }
     render() {
         return (
-            <ScrollView>
-                <Container style={[styles.container, stylesglobe.background]}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={[styles.container, stylesglobe.background]}>
                     <View>
                         <Item style={{borderWidth:1}}>
                             <Input
@@ -45,22 +37,20 @@ export default class Home extends Component {
                             <Text style={styles.category}>Favorite</Text>
                             <Icon name="arrow-forward"/>
                         </View>
-                    <View style={styles.listhorizontal}>
-                    <FlatList
-                    data={this.state.dataCard}
-                    horizontal={true}
-                    renderItem={({item}) =>
-                    <View>
-                        <Image style={{width: 100, height:100}} source={{uri : item.image}}/>
-                        <Text style={{fontSize: 20, textAlign: 'center'}}>{item.title}</Text>
+                        <View style={styles.listhorizontal}>
+                            <CardHorizontal/>
+                        </View>
                     </View>
-                    
-                    } 
-                        keyExtractor={(item, index) => index.toString()} 
-                        />
+                    <View style={styles.contFav}>
+                        <View style={styles.wrapduajauh}>
+                            <Text style={styles.category}>All</Text>
+                            <Text>See all</Text>
+                        </View>
+                        <View style={styles.verticalList}>
+                            <VerticalList/>
+                        </View>
                     </View>
-                    </View>
-                </Container>
+                </View>
             </ScrollView>
            
         );
@@ -84,6 +74,9 @@ const styles = StyleSheet.create({
         paddingVertical : 15
     },
     listhorizontal : {
-        width : '100%'
+        width : '100%',
+        paddingTop:10
+    },
+    verticalList : {
     }
 })

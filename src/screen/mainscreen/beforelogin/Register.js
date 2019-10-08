@@ -9,7 +9,7 @@ import {
 
 import { InputTextX } from '../../../component/Input/Input';
 import { stylesglobe } from '../../../constant/styles';
-import ButtonLogReg from '../../../component/button/ButtonLogReg';
+import {ButtonLogReg} from '../../../component/button/ButtonLogReg';
 
 
 const height = Dimensions.get('window').height

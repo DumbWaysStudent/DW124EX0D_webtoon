@@ -4,7 +4,8 @@ import {
     FlatList, 
     Text,
     Image,
-    StyleSheet
+    StyleSheet,
+    TouchableOpacity
 } from 'react-native';
 
 
@@ -26,24 +27,32 @@ export default class CardHorizontal extends Component {
     }
     render() {
         return (
+            <View >
                 <FlatList
-                data = {this.state.dataCard}
-                horizontal={true}
-                renderItem={({item}) => {
-                    <View>
-                        <Image style={styles.imagelist} source={{uri : item.image}}/>
-                        <Text>{item.title}</Text>
+            data={this.state.dataCard}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            renderItem={({item}) =>
+            <TouchableOpacity onPress={() => alert(item.title)}>
+                <View style={styles.list}>
+                    <Image style={styles.imagelist} source={{uri : item.image}}/>
+                    <View style={{width : 150}}>
+                        <Text style={{ textAlign: 'center'}}>{item.title}</Text>
                     </View>
-                }}
-                keyExtractor={(item, index) => index.toString()} 
-                />
+                </View>
+            </TouchableOpacity>
+            }
+            keyExtractor={(item, index) => index.toString()
+            }/>
+            </View>
+            
         );
     }
 }
 
 const styles = StyleSheet.create({
     imagelist : {
-        height :'90%' ,
-        width : '30%'
+        width: '100%', 
+        height:150
     }
 })

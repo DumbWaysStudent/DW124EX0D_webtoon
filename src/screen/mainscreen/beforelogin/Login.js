@@ -16,7 +16,8 @@ import {
 } from 'native-base'
 import { InputTextX } from '../../../component/Input/Input';
 import { stylesglobe } from '../../../constant/styles';
-import ButtonLogReg from '../../../component/button/ButtonLogReg';
+import {ButtonLogReg} from '../../../component/button/ButtonLogReg';
+import { emailvalid } from '../../../function/validation';
 
 
 export default class Login extends Component {
@@ -77,7 +78,7 @@ export default class Login extends Component {
                             Lupa kata sandi ?
                         </Text>
                     </View>
-                    <ButtonLogReg btnTitle="Login" onPressButton={() => navigation.navigate('Home')}/>
+                    <ButtonLogReg disabled={emailvalid(this.state.email) ? false : true} btnTitle="Login" onPressButton={() => navigation.navigate('Home')}/>
                 </View>
                 <View style={{flex : 1, alignItems : "center"}}>
                     <Text>

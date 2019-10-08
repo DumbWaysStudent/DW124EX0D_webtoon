@@ -32,7 +32,7 @@ export default class ImageAutoChange extends Component {
     return (
       <View>
         <Slideshow
-          height={145}
+          height={200}
           overlay={true}
           arrowSize={0}
           indicatorSelectedColor="#2ce617"
