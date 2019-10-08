@@ -26,14 +26,15 @@ export default class CardHorizontal extends Component {
         }
     }
     render() {
+        // const { navigation } = this.props
         return (
             <View >
-                <FlatList
+            <FlatList
             data={this.state.dataCard}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             renderItem={({item}) =>
-            <TouchableOpacity onPress={() => alert(item.title)}>
+            <TouchableOpacity onPress={() => this.props.onPressCard(item)}>
                 <View style={styles.list}>
                     <Image style={styles.imagelist} source={{uri : item.image}}/>
                     <View style={{width : 150}}>

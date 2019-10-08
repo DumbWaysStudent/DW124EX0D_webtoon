@@ -21,10 +21,12 @@ export default class Home extends Component {
         }
     }
     render() {
+        const { navigation } = this.props
+
         return (
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={[styles.container, stylesglobe.background]}>
-                    <View>
+                    <View style={styles.searchbar}>
                         <Item style={{borderWidth:1}}>
                             <Input
                             placeholder="Search" />
@@ -38,7 +40,7 @@ export default class Home extends Component {
                             <Icon name="arrow-forward"/>
                         </View>
                         <View style={styles.listhorizontal}>
-                            <CardHorizontal/>
+                            <CardHorizontal onPressCard={(item) => navigation.navigate('DetailWebtoon', {dataKomik : item})}/>
                         </View>
                     </View>
                     <View style={styles.contFav}>
@@ -47,7 +49,7 @@ export default class Home extends Component {
                             <Text>See all</Text>
                         </View>
                         <View style={styles.verticalList}>
-                            <VerticalList/>
+                            <VerticalList onPressList={(item) => navigation.navigate('DetailWebtoon', {dataKomik : item})}/>
                         </View>
                     </View>
                 </View>
@@ -77,6 +79,7 @@ const styles = StyleSheet.create({
         width : '100%',
         paddingTop:10
     },
-    verticalList : {
+    searchbar : {
+        paddingBottom : 15
     }
 })

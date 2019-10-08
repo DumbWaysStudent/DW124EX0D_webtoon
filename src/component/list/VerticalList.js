@@ -32,7 +32,7 @@ export default class VerticalList extends Component {
             <View>
                 {this.state.dataCard.map((item, i) => {
                     return (
-                <TouchableOpacity key={i} onPress={() => alert(item.title)}>
+                <TouchableOpacity key={i} onPress={() => this.props.onPressList(item)}>
                         <View  style={styles.wrapCard}>
                             <Image style={{width: width/5, height:width/5}} source={{uri : item.image}}/>
                             <View style={styles.wrapSubCard}>
