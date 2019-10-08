@@ -12,7 +12,7 @@ import {
 export default class HeaderComp extends Component {
     render() {
         return (
-            <Header>
+            <Header style={{backgroundColor : '#443737'}}>
                 <Left>
                     <Button transparent onPress={this.props.onPressBack} >
                         <Icon  name="ios-arrow-round-back"/>
