@@ -41,7 +41,7 @@ export default class WebtoonCreation extends Component {
                     data={this.state.data}
                     showsVerticalScrollIndicator={false}
                     renderItem={({item}) =>
-                    <TouchableOpacity onPress={() => alert(item.title)}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('EditMyWebtoon', {dataEdit : item})}>
                         <View style={styles.wrapContainerFlatlist}>
                             <View style={styles.borderImage}>
                                 <Image style={styles.imageDilist} source={{uri : item.image}}/>

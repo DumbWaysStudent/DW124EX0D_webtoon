@@ -7,6 +7,7 @@ import DetailEpisode from './../screen/subscreen/DetailEpisode'
 import WebtoonCreation from './../screen/subscreen/WebtoonCreation'
 import CreateWebtoon from '../screen/subscreen/CreateWebtoon'
 import NewEpisode from '../screen/subscreen/NewEpisode'
+import EditMyWebtoon from '../screen/subscreen/EditMyWebtoon'
 
 
 
@@ -45,6 +46,12 @@ const MemberNavigator = createStackNavigator({
     },
     NewEpisode : {
         screen : NewEpisode,
+        navigationOptions : {
+            header : null
+        }
+    },
+    EditMyWebtoon : {
+        screen : EditMyWebtoon,
         navigationOptions : {
             header : null
         }
