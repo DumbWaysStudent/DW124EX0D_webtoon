@@ -6,13 +6,11 @@ import {
     Text 
 } from 'react-native';
 
-
 import {
     Item,
     Label,
     Input,
     Icon,
-    Right
 } from 'native-base'
 import { InputTextX } from '../../../component/Input/Input';
 import { stylesglobe } from '../../../constant/styles';
@@ -65,6 +63,7 @@ export default class Login extends Component {
                             <Icon name="ios-lock" style={styles.iconLock}/>
                             <Label>Password</Label>
                             <Input 
+                            autoCapitalize="none"
                             keyboardType="default"
                             secureTextEntry={this.state.shwhidepsw}
                             onChangeText={(text)=> this.setState({password: text})}

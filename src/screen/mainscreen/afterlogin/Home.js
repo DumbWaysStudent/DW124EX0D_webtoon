@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, ScrollView , Dimensions , FlatList, Image} from 'react-native';
+import {StatusBar, StyleSheet, View, Text, ScrollView , Dimensions} from 'react-native';
 import {
     Container,
     Item,
@@ -25,6 +25,8 @@ export default class Home extends Component {
 
         return (
             <ScrollView showsVerticalScrollIndicator={false}>
+                <StatusBar
+                backgroundColor="#443737" />
                 <View style={[styles.container, stylesglobe.background]}>
                     <View style={styles.searchbar}>
                         <Item style={{borderWidth:1}}>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Alert, View, Text, TextInput , StyleSheet, Dimensions, FlatList, Image} from 'react-native';
+import {Alert, View, Text, TextInput , StyleSheet, Dimensions, FlatList, Image, TouchableOpacity} from 'react-native';
 
 import {
     Button
@@ -34,7 +34,7 @@ export default class EditMyWebtoon extends Component {
         const {dataEdit} = this.props.navigation.state.params
         this.setState({webtoondata : dataEdit })
     }
-    _handleFinisEditWebtoon = () => {
+    _handleFinishEditWebtoon = () => {
         this.props.navigation.navigate('WebtoonCreation')
     }
     _handleDeleteWebtoon = () => {
@@ -55,7 +55,7 @@ export default class EditMyWebtoon extends Component {
         return (
             <View style={styles.container}>
                 <HeaderComp 
-                iconDua={true} iconDuaName="checkmark" pressIconDua={this._handleFinishWebtoon} 
+                iconDua={true} iconDuaName="checkmark" pressIconDua={this._handleFinishEditWebtoon} 
                 title="Edit Webtoon" onPressBack={() => this.props.navigation.goBack()}/>
                 <View style={styles.bodyContainer}>
                     <View>
@@ -72,7 +72,7 @@ export default class EditMyWebtoon extends Component {
                             data={this.state.episodeList}
                             showsVerticalScrollIndicator={false}
                             renderItem={({item}) =>
-                            // <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailEpisode', {dataEpisode : item})}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('EditEpisodeScreen', {dataEpisode : item})}>
                                 <View style={styles.wrapContainerFlatlist}>
                                     <View style={styles.borderImage}>
                                         <Image style={styles.imageDilist} source={{uri : item.image}}/>
@@ -82,7 +82,7 @@ export default class EditMyWebtoon extends Component {
                                         <Text>{item.episodes}</Text>
                                     </View>
                                 </View>
-                            // </TouchableOpacity>
+                            </TouchableOpacity>
                             }
                             keyExtractor={(item, index) => index.toString()}
                         />

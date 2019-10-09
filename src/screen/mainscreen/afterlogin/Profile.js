@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Alert , StyleSheet, Dimensions, Image, ScrollView, TouchableOpacity} from 'react-native';
+import { Text, View, StatusBar , StyleSheet, Dimensions, Image, TouchableOpacity} from 'react-native';
 import {
     Icon,
     Button
@@ -46,6 +46,8 @@ export default class Profile extends Component {
     render() {
         return (
             <View style={{ position : 'relative', backgroundColor:'#f7f7f7', flex : 1}}>
+                <StatusBar
+                backgroundColor="#443737" />
                 <View style={{width : SCREEN_WIDTH , height: SCREEN_HEIGHT/8,}}>
                     <View style={styles.absolutebg}>
                         <Text style={styles.texthello}> Profile</Text>

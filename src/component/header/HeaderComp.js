@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { 
+    StatusBar
+ } from 'react-native';
 import {
     Header ,
     Left,
@@ -12,7 +15,7 @@ import {
 export default class HeaderComp extends Component {
     render() {
         return (
-            <Header style={{backgroundColor : '#443737'}}>
+            <Header androidStatusBarColor="#443737" style={{ backgroundColor : '#443737'}}>
                 <Left>
                     <Button transparent onPress={this.props.onPressBack} >
                         <Icon  name="ios-arrow-round-back"/>

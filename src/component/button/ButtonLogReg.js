@@ -8,7 +8,7 @@ import {
 export class ButtonLogReg extends Component {
     render() {
         return (
-            <Button disabled={this.props.disabled} success style={styles.btnText} onPress={this.props.onPressButton}>
+            <Button disabled={this.props.disabled} style={styles.btnText} onPress={this.props.onPressButton}>
                 <Text>
                     {this.props.btnTitle}
                 </Text>
@@ -33,7 +33,8 @@ export class ButtonKecil extends Component {
 const styles = StyleSheet.create({
     btnText : {
         justifyContent : "center",
-        borderRadius : 10
+        borderRadius : 10,
+        backgroundColor : '#443737'
     },
     buttonKecil : {
         width:70, 

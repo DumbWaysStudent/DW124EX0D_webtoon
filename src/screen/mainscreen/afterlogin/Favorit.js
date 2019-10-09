@@ -7,6 +7,7 @@ import {
     StyleSheet,
     Dimensions,
     TouchableOpacity,
+    StatusBar
 } from 'react-native';
 import {
     Item,
@@ -35,6 +36,8 @@ export default class Favorit extends Component {
     render() {
         return (
             <View style={styles.container}>
+                <StatusBar
+                backgroundColor="#443737" />
                 <View style={styles.searchbar}>
                         <Item style={{borderWidth:1}}>
                             <Input

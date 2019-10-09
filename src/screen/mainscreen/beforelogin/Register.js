@@ -6,7 +6,12 @@ import {
     Dimensions, 
     Text 
 } from 'react-native';
-
+import {
+    Item,
+    Icon,
+    Label,
+    Input
+} from 'native-base'
 import { InputTextX } from '../../../component/Input/Input';
 import { stylesglobe } from '../../../constant/styles';
 import {ButtonLogReg} from '../../../component/button/ButtonLogReg';
@@ -18,7 +23,8 @@ export default class Login extends Component {
         super() 
         this.state = {
             email : '',
-            password : ''
+            password : '',
+            fullname : ''
         }
     }
     render() {
@@ -29,10 +35,22 @@ export default class Login extends Component {
                     <Image style={styles.imageLogo} source={require('../../../assets/image/logo.png')} />
                 </View>
                 <View style={styles.wrapformfield}>
-                    <InputTextX keyboardType="email-address" icon={true} iconName="mail-open" label="Email"/>
-                    <InputTextX keyboardType="default" icon={true} iconName="person" label="Username"/>
-                    <InputTextX keyboardType="default" icon={true} iconName="lock" label="Password"/>
-                    
+                    <InputTextX 
+                    handleChangeText={text => this.setState({email : text})}
+                    keyboardType="email-address" icon={true} iconName="mail-open" label="Email"/>
+                    <InputTextX 
+                    handleChangeText={text => this.setState({fullname : text})}
+                    keyboardType="default" icon={true} iconName="person" label="Fullname"/>
+                    <Item floatingLabel>
+                        <Icon name="ios-lock" style={styles.iconLock}/>
+                        <Label>Password</Label>
+                        <Input 
+                        autoCapitalize="none"
+                        keyboardType="default"
+                        secureTextEntry={true}
+                        onChangeText={(text)=> this.setState({password: text})}
+                        />
+                    </Item>      
                 </View>
                 <View style={styles.wrapBtn}>
                     <ButtonLogReg btnTitle="Daftar" onPressButton={() => alert('Daftar')}/>
