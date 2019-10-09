@@ -58,7 +58,9 @@ export default class Profile extends Component {
                         <Text style={styles.nameInfo}>Your Name</Text>
                     </View>
                         <View style={styles.action} >
-                            <TouchableOpacity style={styles.touchableX}>
+                            <TouchableOpacity 
+                            onPress={() => this.props.navigation.navigate('WebtoonCreation')}
+                            style={styles.touchableX}>
                                 <View style={styles.wrapItemTou}>
                                     <Text>My Webtoon Creation</Text>
                                     <Icon name="fastforward"/>
@@ -66,7 +68,7 @@ export default class Profile extends Component {
                             </TouchableOpacity> 
                             <View >
                             <Button primary style={styles.logout} onPress={this.onPressLogout} >
-                                <Text>LOG OUT</Text>
+                                <Text style={{color : 'white'}}>LOGOUT</Text>
                             </Button>
                             </View>
                         </View>
@@ -81,7 +83,7 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
     absolutebg : {
         padding: 20,
-        backgroundColor: '#2ce617',
+        backgroundColor: '#443737',
         position: "absolute",
         flexDirection: "row",
         justifyContent: "space-between",
@@ -105,8 +107,7 @@ const styles = StyleSheet.create({
     },
     logout : {
         justifyContent : "center",
-        backgroundColor: '#2ce617',
-        color : '#2ce617',
+        backgroundColor: '#443737',
     },
     touchableX : {
         justifyContent : "center",

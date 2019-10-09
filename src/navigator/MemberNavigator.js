@@ -4,6 +4,8 @@ import { createStackNavigator} from 'react-navigation-stack'
 import BottomTabNavigator from './BottomTabNavigator'
 import DetailWebtoon from './../screen/subscreen/DetailWebtoon'
 import DetailEpisode from './../screen/subscreen/DetailEpisode'
+import WebtoonCreation from './../screen/subscreen/WebtoonCreation'
+
 
 
 
@@ -23,6 +25,12 @@ const MemberNavigator = createStackNavigator({
     },
     DetailEpisode  : {
         screen : DetailEpisode,
+        navigationOptions : {
+            header : null
+        }
+    },
+    WebtoonCreation : {
+        screen : WebtoonCreation,
         navigationOptions : {
             header : null
         }
