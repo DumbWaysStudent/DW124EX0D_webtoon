@@ -65,7 +65,10 @@ export default class DetailEpisode extends Component {
         const dataEpisode = this.props.navigation.state.params.dataEpisode
         return (
             <View style={{flex : 1}}>
-                <HeaderComp iconShare={true} pressIconShare={this.onSharePress} title={dataEpisode.title} onPressBack={() => this.props.navigation.goBack()}/>
+                <HeaderComp 
+                iconDua={true} iconDuaName="share" pressIconDua={this.onSharePress} 
+                title={dataEpisode.title} 
+                onPressBack={() => this.props.navigation.goBack()}/>
                 <View style={{marginBottom : 20}}>
                     <FlatList
                     style={{marginBottom :50}}

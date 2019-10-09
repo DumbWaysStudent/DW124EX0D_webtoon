@@ -45,37 +45,33 @@ export default class Profile extends Component {
     
     render() {
         return (
-            <ScrollView style={{ position : 'relative', backgroundColor:'#f7f7f7'}}>
+            <View style={{ position : 'relative', backgroundColor:'#f7f7f7', flex : 1}}>
                 <View style={{width : SCREEN_WIDTH , height: SCREEN_HEIGHT/8,}}>
-                <View style={styles.absolutebg}>
-                    <Text style={styles.texthello}> Profile</Text>
-                    <Icon onPress={() => this.props.navigation.navigate('EditProfile')} name="create"/>
-                </View>
+                    <View style={styles.absolutebg}>
+                        <Text style={styles.texthello}> Profile</Text>
+                        <Icon style={{color : 'white'}} onPress={() => this.props.navigation.navigate('EditProfile')} name="create"/>
+                    </View>
                 </View>
                 <View >
                     <View style={{alignItems:"center", }}>
                         <Image style={styles.avatar} source={{uri : this.state.image}}/>
                         <Text style={styles.nameInfo}>Your Name</Text>
                     </View>
-                        <View style={styles.action} >
-                            <TouchableOpacity 
-                            onPress={() => this.props.navigation.navigate('WebtoonCreation')}
-                            style={styles.touchableX}>
-                                <View style={styles.wrapItemTou}>
-                                    <Text>My Webtoon Creation</Text>
-                                    <Icon name="fastforward"/>
-                                </View>
-                            </TouchableOpacity> 
-                            <View >
-                            <Button primary style={styles.logout} onPress={this.onPressLogout} >
-                                <Text style={{color : 'white'}}>LOGOUT</Text>
-                            </Button>
+                    <View style={styles.action} >
+                        <TouchableOpacity 
+                        onPress={() => this.props.navigation.navigate('WebtoonCreation')}
+                        style={styles.touchableX}>
+                            <View style={styles.wrapItemTou}>
+                                <Text>My Webtoon Creation</Text>
+                                <Icon name="fastforward"/>
                             </View>
-                        </View>
-                </View>
-                
-               
-            </ScrollView>
+                        </TouchableOpacity> 
+                    </View>
+                </View>   
+                <Button style={styles.logout} onPress={this.onPressLogout} >
+                    <Text style={{color : 'white'}}>LOGOUT</Text>
+                </Button>
+            </View>
         );
     }
 }
@@ -106,8 +102,12 @@ const styles = StyleSheet.create({
         fontFamily: "OpenSans-SemiBold"
     },
     logout : {
-        justifyContent : "center",
+        alignSelf : "flex-end",
+        position : "absolute",
+        bottom : 0,
         backgroundColor: '#443737',
+        width : SCREEN_WIDTH,
+        justifyContent : "center"
     },
     touchableX : {
         justifyContent : "center",
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
         marginHorizontal : 20
     },
     action : {
-        paddingVertical : 100
+        paddingVertical : 50
     },
     nameInfo : {
         fontFamily : 'Montserrat-SemiBold',

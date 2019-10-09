@@ -57,7 +57,7 @@ export default class WebtoonCreation extends Component {
                 />
                 <View style={{position:'absolute',bottom:0,alignSelf:'flex-end'}}>
                     <Icon style={styles.icon} color="#443737" name="plus-circle"
-                    onPress={() => alert('tambah')}
+                    onPress={() => this.props.navigation.navigate('CreateWebtoon')}
                     />
                 </View>
 

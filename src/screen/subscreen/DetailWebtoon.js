@@ -90,7 +90,9 @@ export default class DetailWebtoon extends Component {
         const { dataAnime } = this.state
         return (
             <View style={{flex : 1}}>
-                <HeaderComp iconShare={true} pressIconShare={this.onSharePress} title={dataKomik.title} onPressBack={() => this.props.navigation.goBack()}/>
+                <HeaderComp 
+                iconDua={true} iconDuaName="share" pressIconDua={this.onSharePress} 
+                title={dataKomik.title} onPressBack={() => this.props.navigation.goBack()}/>
                 <View style={{flex : 1}}>
                 <View style={styles.wrapImage}>
                     <Image style={styles.imagegede} source={{uri : dataKomik.image}}/>

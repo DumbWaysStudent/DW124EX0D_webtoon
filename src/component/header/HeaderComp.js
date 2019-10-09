@@ -21,9 +21,9 @@ export default class HeaderComp extends Component {
                 <Body>
                     <Title style={{fontFamily: 'OpenSans-SemiBold'}}>{this.props.title}</Title>
                 </Body>
-                {this.props.iconShare ? 
+                {this.props.iconDua ? 
                 <Right>
-                    <Icon color="white" name="share" onPress={this.props.pressIconShare}/>
+                    <Icon style={{color : 'white'}} name={this.props.iconDuaName} onPress={this.props.pressIconDua}/>
                 </Right>
                 : null}
             </Header>

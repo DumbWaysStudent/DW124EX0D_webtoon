@@ -62,7 +62,7 @@ export default class EditProfile extends Component {
                 <View style={{width : SCREEN_WIDTH , height: SCREEN_HEIGHT/8,}}>
                 <View style={styles.absolutebg}>
                     <Text style={styles.texthello}>Edit Profile</Text>
-                    <Icon onPress={this._handleFinishEdit} name="checkmark"/>
+                    <Icon style={{color : 'white'}} onPress={this._handleFinishEdit} name="checkmark"/>
                 </View>
                 </View>
                 <View >
@@ -90,7 +90,7 @@ export default class EditProfile extends Component {
 const styles = StyleSheet.create({
     absolutebg : {
         padding: 20,
-        backgroundColor: '#2ce617',
+        backgroundColor: '#443737',
         position: "absolute",
         flexDirection: "row",
         justifyContent: "space-between",
