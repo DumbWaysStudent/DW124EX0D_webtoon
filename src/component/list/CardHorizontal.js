@@ -35,7 +35,7 @@ export default class CardHorizontal extends Component {
             showsHorizontalScrollIndicator={false}
             renderItem={({item}) =>
             <TouchableOpacity onPress={() => this.props.onPressCard(item)}>
-                <View style={styles.list}>
+                <View style={{}}>
                     <Image style={styles.imagelist} source={{uri : item.image}}/>
                     <View style={{width : 150}}>
                         <Text style={{ textAlign: 'center'}}>{item.title}</Text>

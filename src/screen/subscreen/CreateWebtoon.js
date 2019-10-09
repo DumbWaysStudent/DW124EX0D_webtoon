@@ -69,7 +69,7 @@ export default class CreateWebtoon extends Component {
                             keyExtractor={(item, index) => index.toString()}
                         />
                     </View>
-                    <Button style={styles.btnAdd}>
+                    <Button onPress={() => this.props.navigation.navigate('NewEpisode')} style={styles.btnAdd}>
                         <Text style={{color : "white"}}>ADD EPISODE</Text>
                     </Button>
                 </View>    
