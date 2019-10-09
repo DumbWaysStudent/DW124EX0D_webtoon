@@ -7,6 +7,7 @@ import DetailEpisode from './../screen/subscreen/DetailEpisode'
 
 
 
+
 const MemberNavigator = createStackNavigator({
     BottomTabNavigator : {
         screen : BottomTabNavigator,

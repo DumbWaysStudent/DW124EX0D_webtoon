@@ -49,7 +49,7 @@ export default class Profile extends Component {
                 <View style={{width : SCREEN_WIDTH , height: SCREEN_HEIGHT/8,}}>
                 <View style={styles.absolutebg}>
                     <Text style={styles.texthello}> Profile</Text>
-                    <Icon name="create"/>
+                    <Icon onPress={() => this.props.navigation.navigate('EditProfile')} name="create"/>
                 </View>
                 </View>
                 <View >
