@@ -6,10 +6,10 @@ import {
     Icon,
     Input
 } from 'native-base'
-import ImageAutoChange from '../../../component/imageslider/ImageAutoChange';
-import { stylesglobe } from '../../../constant/styles';
-import CardHorizontal from '../../../component/list/CardHorizontal';
-import VerticalList from '../../../component/list/VerticalList';
+import ImageAutoChange from '../component/imageslider/ImageAutoChange';
+import { stylesglobe } from '../constant/styles';
+import CardHorizontal from '../component/list/CardHorizontal';
+import VerticalList from '../component/list/VerticalList';
 
 
 const height = Dimensions.get("window").height

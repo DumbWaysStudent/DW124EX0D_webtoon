@@ -6,23 +6,24 @@ import {
     TextInput,
     FlatList,
     Dimensions,
-    Image
+    Image,
+    Alert
 } from 'react-native';
 import {
     Button
 } from 'native-base'
 import ImagePicker from 'react-native-image-picker'
-import HeaderComp from '../../component/header/HeaderComp';
+import HeaderComp from '../component/header/HeaderComp';
 
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-export default class NewEpisode extends Component {
+export default class EditEpisodeScreen extends Component {
     constructor() {
         super() 
         this.state = {
-            episodename : '',
+            dataEpisode : {title : ''},
             episodes : [{
                 episodes : 1,
                 name: 'The Secret of Angel',
@@ -39,6 +40,10 @@ export default class NewEpisode extends Component {
         }
     }
 
+    componentDidMount() {
+        const {dataEpisode} = this.props.navigation.state.params
+        this.setState({dataEpisode})
+    }
     handleChoosePhoto = () => {
         const options = {
             title: 'Pilih Photo',
@@ -69,22 +74,35 @@ export default class NewEpisode extends Component {
             }
           });
       };
-    _handleFinishNewEpisode = () => {
-        this.props.navigation.navigate('CreateWebtoon')
+    _handleFinishEditEpisode = () => {
+        this.props.navigation.goBack()
+    }
+    _handleDeleteEpisode = () => {
+        Alert.alert(
+            'Delete this Episode ?',
+            '',
+            [
+              {text: 'No', onPress: () => {}},
+              {text: 'Yes', onPress: () => this.props.navigation.goBack()},
+            ],
+            {cancelable: false},
+          );
+        // let webtoonId = this.state.webtoondata._id
+        // this.props.navigation.navigate('WebtoonCreation')
     }
     render() {
         return (
             <View style={{flex : 1}}>
                 <HeaderComp 
-                iconDua={true} iconDuaName="checkmark" pressIconDua={this._handleFinishNewEpisode}
-                title="Create Episode" onPressBack={() => this.props.navigation.goBack()}/>
+                iconDua={true} iconDuaName="checkmark" pressIconDua={this._handleFinishEditEpisode}
+                title="Edit Episode" onPressBack={() => this.props.navigation.goBack()}/>
                 <View style={styles.bodyContainer}>
                     <View>
                         <Text style={styles.titleStyle}>Name</Text>
                         <TextInput
                         style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                        onChangeText={text => this.setState({ webtoontitle : text})}
-                        value={this.state.webtoontitle}
+                        onChangeText={text => this.setState({ dataEpisode : {...this.state.dataEpisode,title : text}})}
+                        value={this.state.dataEpisode.title}
                         />
                     </View>
                     <View>
@@ -92,7 +110,7 @@ export default class NewEpisode extends Component {
                         <FlatList
                         data={this.state.episodes}
                         renderItem={({ item }) => 
-                        <View style={{paddingBottom :5}}>
+                        <View style={{paddingBottom : 5}}>
                             <View style={{flexDirection : "row"}}>
                                 <Image style={styles.imageList} source={{uri : item.uri}} />
                                 <View style={{justifyContent : "center"}}>
@@ -108,6 +126,9 @@ export default class NewEpisode extends Component {
                     </View>
                     <Button onPress={this.handleChoosePhoto} style={styles.btn}>
                         <Text style={styles.txtBtn}>+ IMAGE</Text>
+                    </Button>
+                    <Button onPress={this._handleDeleteEpisode} style={styles.deleteAdd}>
+                        <Text style={{color : "white"}}>DELETE EPISODE</Text>
                     </Button>
 
                 </View>
@@ -136,5 +157,10 @@ const styles = StyleSheet.create({
     },
     txtBtn : {
         color : "white"
+    },
+    deleteAdd : {
+        marginTop : 20,
+        justifyContent : "center",
+        backgroundColor : 'red'
     }
 })

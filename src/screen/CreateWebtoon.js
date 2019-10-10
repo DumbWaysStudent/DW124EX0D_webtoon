@@ -4,7 +4,7 @@ import { View, Text, TextInput , StyleSheet, Dimensions, FlatList, Image} from '
 import {
     Button
 } from 'native-base'
-import HeaderComp from '../../component/header/HeaderComp';
+import HeaderComp from '../component/header/HeaderComp';
 
 
 const height = Dimensions.get("window").height

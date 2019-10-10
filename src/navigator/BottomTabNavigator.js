@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { createAppContainer } from 'react-navigation'
 import { createBottomTabNavigator }  from 'react-navigation-tabs'
 import { createStackNavigator } from 'react-navigation-stack'
-import Home from '../screen/mainscreen/afterlogin/Home'
-import Profile from '../screen/mainscreen/afterlogin/Profile'
-import Favorit from '../screen/mainscreen/afterlogin/Favorit'
-import EditProfile from '../screen/subscreen/EditProfile'
+import Home from '../screen/Home'
+import Profile from '../screen//Profile'
+import Favorit from '../screen/Favorit'
+import EditProfile from '../screen/EditProfile'
 
 import Icon from 'react-native-vector-icons/Ionicons'
 

@@ -9,7 +9,7 @@ import {
     TouchableOpacity
  } from 'react-native';
  import Icon from 'react-native-vector-icons/FontAwesome5'
-import HeaderComp from '../../component/header/HeaderComp';
+import HeaderComp from '../component/header/HeaderComp';
 
 const height = Dimensions.get("window").height
 const width = Dimensions.get("window").width

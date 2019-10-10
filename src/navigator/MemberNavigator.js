@@ -2,13 +2,13 @@ import { createAppContainer } from 'react-navigation'
 import { createStackNavigator} from 'react-navigation-stack'
 
 import BottomTabNavigator from './BottomTabNavigator'
-import DetailWebtoon from './../screen/subscreen/DetailWebtoon'
-import DetailEpisode from './../screen/subscreen/DetailEpisode'
-import WebtoonCreation from './../screen/subscreen/WebtoonCreation'
-import CreateWebtoon from '../screen/subscreen/CreateWebtoon'
-import NewEpisode from '../screen/subscreen/NewEpisode'
-import EditMyWebtoon from '../screen/subscreen/EditMyWebtoon'
-import EditEpisodeScreen from '../screen/subscreen/EditEpisodeScreen'
+import DetailWebtoon from './../screen/DetailWebtoon'
+import DetailEpisode from './../screen/DetailEpisode'
+import WebtoonCreation from './../screen/WebtoonCreation'
+import CreateWebtoon from '../screen/CreateWebtoon'
+import NewEpisode from '../screen/NewEpisode'
+import EditMyWebtoon from '../screen/EditMyWebtoon'
+import EditEpisodeScreen from '../screen/EditEpisodeScreen'
 
 
 

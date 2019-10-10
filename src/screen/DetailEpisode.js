@@ -3,7 +3,7 @@ import { View ,Text,Image, FlatList, Dimensions, Share, TouchableOpacity, StyleS
 import {
     Button
 } from 'native-base'
-import HeaderComp from '../../component/header/HeaderComp';
+import HeaderComp from '../component/header/HeaderComp';
 
 
 const height = Dimensions.get("window").height

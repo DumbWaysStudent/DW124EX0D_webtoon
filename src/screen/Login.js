@@ -12,10 +12,10 @@ import {
     Input,
     Icon,
 } from 'native-base'
-import { InputTextX } from '../../../component/Input/Input';
-import { stylesglobe } from '../../../constant/styles';
-import {ButtonLogReg} from '../../../component/button/ButtonLogReg';
-import { emailvalid } from '../../../function/validation';
+import { InputTextX } from '../component/Input/Input';
+import { stylesglobe } from '../constant/styles';
+import {ButtonLogReg} from '../component/button/ButtonLogReg';
+import { emailvalid } from '../function/validation';
 
 
 export default class Login extends Component {
@@ -51,7 +51,7 @@ export default class Login extends Component {
         return (
             <View style={[stylesglobe.background, stylesglobe.paddingContainer, {flex :1}]}>
                 <View style={{flex : 3}}>
-                    <Image style={styles.imageLogo} source={require('../../../assets/image/logo.png')} />
+                    <Image style={styles.imageLogo} source={require('../assets/image/logo.png')} />
                 </View>
                 <View style={styles.wrapformfield}>
                     <InputTextX 

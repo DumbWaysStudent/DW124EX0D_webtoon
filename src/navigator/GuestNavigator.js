@@ -1,8 +1,8 @@
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator }  from 'react-navigation-stack'
 
-import Login from '../screen/mainscreen/beforelogin/Login'
-import Register from '../screen/mainscreen/beforelogin/Register'
+import Login from '../screen/Login'
+import Register from '../screen/Register'
 
 const GuestNavigator = createStackNavigator({
     Login : {

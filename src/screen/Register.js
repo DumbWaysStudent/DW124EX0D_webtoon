@@ -12,9 +12,9 @@ import {
     Label,
     Input
 } from 'native-base'
-import { InputTextX } from '../../../component/Input/Input';
-import { stylesglobe } from '../../../constant/styles';
-import {ButtonLogReg} from '../../../component/button/ButtonLogReg';
+import { InputTextX } from '../component/Input/Input';
+import { stylesglobe } from '../constant/styles';
+import {ButtonLogReg} from '../component/button/ButtonLogReg';
 
 
 const height = Dimensions.get('window').height
@@ -32,7 +32,7 @@ export default class Login extends Component {
         return (
             <View style={[stylesglobe.background, stylesglobe.paddingContainer, {flex :1}]}>
                 <View style={{flex : 2}}>
-                    <Image style={styles.imageLogo} source={require('../../../assets/image/logo.png')} />
+                    <Image style={styles.imageLogo} source={require('../assets/image/logo.png')} />
                 </View>
                 <View style={styles.wrapformfield}>
                     <InputTextX 
