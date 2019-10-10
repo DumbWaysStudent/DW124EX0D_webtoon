@@ -82,12 +82,12 @@ export default class DetailEpisode extends Component {
                      <View style={styles.wrapBtn} >
                          <TouchableOpacity style={[styles.btnStyle, {borderRightWidth:1}]}>
                             <View >
-                            <Text style={{paddingTop: 10}}>PREVIOUS</Text>
+                            <Text style={{color : 'white',paddingTop: 10}}>PREVIOUS</Text>
                             </View>
                          </TouchableOpacity>
                         <TouchableOpacity style={styles.btnStyle}>
                             <View  >
-                                <Text style={{paddingTop : 10}}>NEXT</Text>
+                                <Text style={{color : 'white',paddingTop : 10}}>NEXT</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
