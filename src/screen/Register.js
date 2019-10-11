@@ -4,7 +4,7 @@ import {
     StyleSheet,
     Image,
     Dimensions, 
-    Text 
+    Text,
 } from 'react-native';
 import {
     Item,
@@ -16,16 +16,58 @@ import { InputTextX } from '../component/Input/Input';
 import { stylesglobe } from '../constant/styles';
 import {ButtonLogReg} from '../component/button/ButtonLogReg';
 
+import AsyncStorage from '@react-native-community/async-storage'
+import axios from 'axios'
+import jwt from "react-native-pure-jwt";
+import Host from '../environment/Host'
+import { emailvalid } from '../function/validation';
 
 const height = Dimensions.get('window').height
-export default class Login extends Component {
+
+
+export default class Register extends Component {
     constructor() {
         super() 
         this.state = {
             email : '',
             password : '',
-            fullname : ''
+            fullname : '',
         }
+    }
+
+    _handleRegister = async () => {
+        try {
+        const {fullname , email, password} = this.state
+        const Data = {
+            fullname,
+            email,
+            password,
+        }
+        const user = await axios.post(`${Host.localhost}/users`, Data)
+        if(user) {
+            await AsyncStorage.setItem('userToken', user.data );
+                const objJwt = await jwt.decode(
+                user.data, // the token
+                'webtoonclone', // the secret
+                {
+                    skipValidation: true // to skip signature and exp verification
+                }
+                );
+                await AsyncStorage.setItem('userData',JSON.stringify(objJwt.payload.userData));
+                this.props.navigation.navigate('MemberNavigator')
+            }
+    }
+    catch (error){
+        console.log(error)
+    }
+    }
+
+    formValid = () => {
+        emailvalid(this.state.email) ?
+        this.state.fullname != "" ? 
+        this.state.password != "" 
+        : false 
+        : true
     }
     render() {
         const {navigation} = this.props
@@ -50,10 +92,10 @@ export default class Login extends Component {
                         secureTextEntry={true}
                         onChangeText={(text)=> this.setState({password: text})}
                         />
-                    </Item>      
+                    </Item>
                 </View>
                 <View style={styles.wrapBtn}>
-                    <ButtonLogReg btnTitle="Daftar" onPressButton={() => alert('Daftar')}/>
+                    <ButtonLogReg btnTitle="Daftar" onPressButton={this._handleRegister}/>
                 </View>
                 <View style={{flex : 1, alignItems : "center"}}>
                     <Text>

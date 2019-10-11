@@ -3,7 +3,7 @@ import {
     View, 
     StyleSheet,
     Image,
-    Text 
+    Text,
 } from 'react-native';
 
 import {
@@ -16,6 +16,12 @@ import { InputTextX } from '../component/Input/Input';
 import { stylesglobe } from '../constant/styles';
 import {ButtonLogReg} from '../component/button/ButtonLogReg';
 import { emailvalid } from '../function/validation';
+
+import AsyncStorage from '@react-native-community/async-storage'
+
+import jwt from "react-native-pure-jwt";
+import axios from 'axios'
+import Host from '../environment/Host'
 
 
 export default class Login extends Component {
@@ -36,18 +42,37 @@ export default class Login extends Component {
             this.setState({iconpsw : "ios-eye", shwhidepsw:false})
         }
     }
-    // _handleLogin = async() => {
-    //     const loginData = {
-    //         email : this.state.email,
-    //         password : this.state.password
-    //     }
-    //     const x = await axios.post(`${Host}/auth` , loginData)
-
+    _handleLogin = async() => {
         
-    // }
+         try {
+        const loginData = {
+            email : this.state.email,
+            password : this.state.password
+        }
+        const user = await axios.post(`${Host.localhost}/auth` , loginData)
+        console.log(user.data)
+        if(user) {
+            console.log(user.data)
+            await AsyncStorage.setItem('userToken', user.data );
+                const objJwt = await jwt.decode(
+                user.data, // the token
+                'webtoonclone', // the secret
+                {
+                    skipValidation: true // to skip signature and exp verification
+                }
+                );
+                await AsyncStorage.setItem('userData',JSON.stringify(objJwt.payload.userData));
+                this.props.navigation.navigate('MemberNavigator')
+            }
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
+        
+       
 
     render() {
-        const {navigation} = this.props
         return (
             <View style={[stylesglobe.background, stylesglobe.paddingContainer, {flex :1}]}>
                 <View style={{flex : 3}}>
@@ -77,12 +102,14 @@ export default class Login extends Component {
                             Lupa kata sandi ?
                         </Text>
                     </View>
-                    <ButtonLogReg disabled={emailvalid(this.state.email) ? false : true} btnTitle="Login" onPressButton={() => navigation.navigate('Home')}/>
+                    <ButtonLogReg disabled={emailvalid(this.state.email) ? this.state.password != "" ? false : true : true} 
+                    btnTitle="Login" 
+                    onPressButton={this._handleLogin}/>
                 </View>
                 <View style={{flex : 1, alignItems : "center"}}>
                     <Text>
                         Belum punya akun ? 
-                        <Text style={styles.textDaftar} onPress={() => navigation.navigate('Register')}>Daftar</Text>
+                        <Text style={styles.textDaftar} onPress={() => this.props.navigation.navigate('Register')}>Daftar</Text>
                     </Text>
                 </View>
             </View>
