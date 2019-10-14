@@ -63,7 +63,6 @@ module.exports = {
     remove : async (req, res, next) => {
         try {
             const {webtoonId, userId} = req.params
-            // const userWebtoon = Webtoon.find({createdBy : userId})
             await Webtoon.findByIdAndDelete(webtoonId)
             res.status(204).send("Webtoon successfully deleted")
         }
