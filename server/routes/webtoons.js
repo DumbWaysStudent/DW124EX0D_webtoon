@@ -1,8 +1,7 @@
 const express = require('express')
 require('express-group-routes')
 
-// const app = require('express-promise-router')()
-const app = express()
+const app = require('express-promise-router')()
 
 const WebtoonController = require('../controllers/WebtoonController')
 
@@ -13,6 +12,7 @@ app.group('/api/v1' , router => {
     router.get("/webtoons", WebtoonController.index)
     router.get("/webtoons/:input", WebtoonController.filteredShow)
 
+    router.get("/user/:userId/webtoons",authentication, WebtoonController.showUserWebtoon)
     router.post("/user/:userId/webtoon",authentication,upload.single('coverImage'),WebtoonController.store)
     // router.get("/webtoons/:userId", authentication, WebtoonController.showUserWebtoon)
 
