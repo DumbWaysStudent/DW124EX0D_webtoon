@@ -8,11 +8,10 @@ const upload = require('../middlewares/multer')
 
 
 app.group('/api/v1', router => {
-    // router.post("/user", UserController.newUser)
     router.get("/webtoon/:webtoonId/episode/:episodeId", EpisodeController.show)
     router.get("/webtoon/:webtoonId/episodes", EpisodeController.index )
-    // router.get("/user/:userId",authentication, UserController.getUser)
     router.post("/user/:userId/webtoon/:webtoonId/episode", authentication, upload.array("contentImage", 15), EpisodeController.store)
+    router.delete("/user/:userId/webtoon/:webtoonId/episode/:episodeId", authentication,EpisodeController.remove)
 }) 
 
 

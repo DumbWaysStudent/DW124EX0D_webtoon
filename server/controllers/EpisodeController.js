@@ -61,5 +61,16 @@ module.exports = {
             console.log(err)
             res.status(400).send("Error showing episode data")
         }
+    },
+    remove : async(req, res, next) => {
+        try {
+            const {episodeId} = req.params
+            await Episode.findByIdAndDelete(episodeId)
+            res.send(204).send("Successfully delete episode")
+        }
+        catch(err) {
+            console.log(err)
+            res.status(400).send("Error removing data")
+        }
     }
 }

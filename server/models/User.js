@@ -16,15 +16,7 @@ const UserSchema = new Schema({
     },
     profilepicture : {
         type : String
-    },
-    // userFavourite : [{
-    //     type : Schema.ObjectId,
-    //     ref : 'Webtoon'
-    // }],
-    userWebtoon : [{
-        type : Schema.Types.ObjectId,
-        ref : 'Webtoon'
-    }]
+    }
 })
 
  

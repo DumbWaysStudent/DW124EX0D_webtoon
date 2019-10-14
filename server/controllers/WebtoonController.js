@@ -1,9 +1,8 @@
 const _ = require('lodash');
 
-const mongoose = require('mongoose')
 const User = require('../models/User')
 const Webtoon = require('../models/Webtoon')
-const Episode = require('../models/Episode')
+
 module.exports = {
     index : async(req, res, next) => {
         const allWebtoon = await Webtoon.find({})
@@ -35,7 +34,6 @@ module.exports = {
             const newWebtoon = new Webtoon(_.pick(req.body , [
                 'title',
                 'genre',
-                'isFavorite'
             ]))
             const path = require('path')
             const remove = path.join(__dirname , '..', 'public')

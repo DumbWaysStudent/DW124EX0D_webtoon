@@ -9,9 +9,6 @@ const WebtoonSchema = new Schema({
     genre : {
         type : String,
     },
-    isFavorite : {
-        type : Boolean
-    },
     createdAt : {
         type : String
     },
