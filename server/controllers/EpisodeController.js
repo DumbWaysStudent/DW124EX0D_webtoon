@@ -73,7 +73,19 @@ module.exports = {
         try {
             const {episodeId} = req.params
             await Episode.findByIdAndDelete(episodeId)
-            res.send(204).send("Successfully delete episode")
+            res.status(204).send("Successfully delete episode")
+        }
+        catch(err) {
+            console.log(err)
+            res.status(400).send("Error removing data")
+        }
+    },
+
+    imageRemove : async(req, res, next) => {
+        try {
+            const {imageId} = req.params
+            await Image.findByIdAndDelete(imageId)
+            res.status(204).send("Successfully delete Image")
         }
         catch(err) {
             console.log(err)

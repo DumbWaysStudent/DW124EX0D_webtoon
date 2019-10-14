@@ -12,6 +12,7 @@ app.group('/api/v1', router => {
     router.get("/webtoon/:webtoonId/episodes", EpisodeController.index )
     router.post("/user/:userId/webtoon/:webtoonId/episode", authentication, upload.array("contentImage", 15), EpisodeController.store)
     router.delete("/user/:userId/webtoon/:webtoonId/episode/:episodeId", authentication,EpisodeController.remove)
+    router.delete("/user/:userId/webtoon/:webtoonId/episode/:episodeId/image/:imageId", authentication,EpisodeController.imageRemove)
 }) 
 
 
