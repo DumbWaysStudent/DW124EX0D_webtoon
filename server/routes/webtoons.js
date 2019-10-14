@@ -15,6 +15,8 @@ app.group('/api/v1' , router => {
     router.post("/user/:userId/webtoon",authentication,upload.single('coverImage'),WebtoonController.store)
 
     router.delete("/user/:userId/webtoon/:webtoonId", authentication, WebtoonController.remove)
+    router.put("/user/:userId/webtoon/:webtoonId", authentication, WebtoonController.update)
+
 })
     
 

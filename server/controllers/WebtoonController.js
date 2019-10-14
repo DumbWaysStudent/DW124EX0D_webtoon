@@ -5,11 +5,13 @@ const Webtoon = require('../models/Webtoon')
 
 module.exports = {
     index : async(req, res, next) => {
-        const allWebtoon = await Webtoon.find({})
-        if(allWebtoon) {
-            res.status(200).send(allWebtoon)
-        }else {
-            res.status(400).send('Error getting Webtoon data')
+        try {
+            const allWebtoon = await Webtoon.find({})
+                res.status(200).send(allWebtoon)
+        }
+        catch(err) {
+            console.log(err)
+            res.status(400).send(err)
         }
     },
     showUserWebtoon : async(req, res, next) => {
@@ -23,7 +25,7 @@ module.exports = {
             }
         }catch(err) {
             console.log(err)
-            res.status(400).send("Error getting user's webtoon")
+            res.status(400).send(err)
         }
     },
 
@@ -46,7 +48,7 @@ module.exports = {
             res.status(201).send(newWebtoon)
         }
         else {
-            res.status(400).send('Webtoon error')
+            res.status(400).send(err)
         }
     },
     
@@ -57,7 +59,7 @@ module.exports = {
             res.status(200).send(result)
         }catch (err) {
             console.log(err)
-            res.status(400).send("Error getting data")
+            res.status(400).send(err)
         }
     },
     remove : async (req, res, next) => {
@@ -68,12 +70,26 @@ module.exports = {
         }
         catch (err){
             console.log(err)
-            res.status(400).send("Error remove webtoon")
+            res.status(400).send(err)
         }
     },
 
-    // update : async (req, res, next) => {
-    //     const user = await User.findById(req.userId)
-
-    // }
+    update : async (req, res, next) => {
+        try {
+                const {webtoonId} = req.params
+                console.log(req.body)
+                const webtoon = await Webtoon.findByIdAndUpdate(webtoonId, 
+                    {
+                    title : req.body.title, 
+                    updatedAt :Date().slice(4, 24).toString(), 
+                    genre : req.body.genre }, 
+                    {new : true}
+                    )
+                res.status(202).send(webtoon)
+        }
+        catch (err) {
+            console.log(err)
+            res.status(400).send(err)
+        }        
+    }
 }
