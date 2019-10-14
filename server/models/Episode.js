@@ -6,9 +6,6 @@ const EpisodeSchema = new Schema ({
         type : String,
         required : true
     },
-    imagesContent : [{
-        type : String,
-    }],
     createdAt : {
         type : String,
     },

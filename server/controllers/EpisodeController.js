@@ -1,6 +1,8 @@
 const _ = require('lodash')
 
 const Episode = require('../models/Episode')
+const Image = require('../models/Image')
+
 
 module.exports = {
     index : async ( req, res ,next) => {
@@ -31,13 +33,17 @@ module.exports = {
             newEpisode.webtoonId = webtoonId
             newEpisode.createdAt = Date().slice(4, 24).toString()
             newEpisode.updatedAt = Date().slice(4, 24).toString()
+            await newEpisode.save()
+            
             req.files.map(item => {
+                const newImage = new Image()
                 const path = require('path')
                 const remove = path.join(__dirname ,'..', 'public')
                 let relPath = item.path.replace(remove, '')
-                newEpisode.imagesContent.push(relPath) 
+                newImage.uri = relPath
+                newImage.episodeId = newEpisode._id
+                newImage.save()
             })
-            await newEpisode.save()
             res.send(newEpisode)
         }
         catch (err){
@@ -50,8 +56,9 @@ module.exports = {
         try {
             const {episodeId} = req.params
             const episode = await Episode.findById(episodeId)
+            const image = await Image.find({episodeId})
             if(episode) {
-                res.status(200).send(episode)
+                res.status(200).send({episode, image})
             }
             else {
                 res.status(200).send("No data found")
