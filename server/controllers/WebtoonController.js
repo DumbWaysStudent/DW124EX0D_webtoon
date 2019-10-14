@@ -49,15 +49,16 @@ module.exports = {
         }
     },
     
-    // show : async (req, res, next) => {
-    //     const user = await User.findById(req.userId)
-    //     if (user) {
-    //         res.status(200).send(user)
-    //     }
-    //     else {
-    //         res.status(400).send('Error showing webtoon')
-    //     }
-    // },
+    filteredShow : async (req, res, next) => {
+        const {input} = req.params
+        try {
+            const result = await Webtoon.find({title : input})
+            res.status(200).send(result)
+        }catch (err) {
+            console.log(err)
+            res.status(400).send("Error getting data")
+        }
+    },
 
     remove : async (req, res, next) => {
         try {

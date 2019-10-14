@@ -11,9 +11,9 @@ const upload = require('../middlewares/multer')
 
 app.group('/api/v1' , router => {
     router.get("/webtoons", WebtoonController.index)
+    router.get("/webtoons/:input", WebtoonController.filteredShow)
 
     router.post("/user/:userId/webtoon",authentication,upload.single('coverImage'),WebtoonController.store)
-    
     // router.get("/webtoons/:userId", authentication, WebtoonController.showUserWebtoon)
 
     router.delete("/user/:userId/webtoon/:webtoonId", authentication, WebtoonController.remove)
