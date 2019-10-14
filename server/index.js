@@ -12,7 +12,7 @@ const users = require('./routes/users')
 const auth = require('./routes/auth');
 const webtoons = require('./routes/webtoons')
 const episodes = require('./routes/episodes')
-
+const favorites = require('./routes/favorites')
 
 
 
@@ -32,6 +32,7 @@ app.use(users);
 app.use(auth);
 app.use(webtoons)
 app.use(episodes)
+app.use(favorites)
  
 const port = process.env.PORT || 7000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

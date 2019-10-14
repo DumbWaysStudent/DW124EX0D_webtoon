@@ -84,7 +84,6 @@ module.exports = {
     update : async(req, res, next) => {
         try {
             const {episodeId} = req.params
-                console.log(req.files)
                 req.files.map(item => {
                     const newImage = new Image()
                     const path = require('path')
