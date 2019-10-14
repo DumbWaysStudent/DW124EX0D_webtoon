@@ -11,7 +11,7 @@ module.exports = {
                 res.status(200).send(episodes)
             }
             else {
-                res.status(200).send("No data avaiable")
+                res.status(200).send("No data found")
             }
         }
         catch (err) {
@@ -43,6 +43,23 @@ module.exports = {
         catch (err){
             console.log(err)
             res.status(400).send('Error adding episodes')
+        }
+    },
+    
+    show : async(req, res, next) => {
+        try {
+            const {episodeId} = req.params
+            const episode = await Episode.findById(episodeId)
+            if(episode) {
+                res.status(200).send(episode)
+            }
+            else {
+                res.status(200).send("No data found")
+            }
+        }
+        catch(err) {
+            console.log(err)
+            res.status(400).send("Error showing episode data")
         }
     }
 }
