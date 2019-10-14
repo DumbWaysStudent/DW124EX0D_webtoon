@@ -3,6 +3,25 @@ const _ = require('lodash')
 const Episode = require('../models/Episode')
 
 module.exports = {
+    index : async ( req, res ,next) => {
+        try {
+            const {webtoonId} = req.params
+            const episodes = await Episode.find({webtoonId})
+            if(episodes) {
+                res.status(200).send(episodes)
+            }
+            else {
+                res.status(200).send("No data avaiable")
+            }
+        }
+        catch (err) {
+            console.log(err)
+            res.status(400).send("Error get episode data")
+        }
+    },
+
+
+
     store : async (req, res, next) => {
         try {
             const {webtoonId} = req.params
