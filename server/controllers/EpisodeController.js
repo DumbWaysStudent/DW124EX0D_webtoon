@@ -81,6 +81,50 @@ module.exports = {
         }
     },
 
+    update : async(req, res, next) => {
+        try {
+            const {episodeId} = req.params
+                console.log(req.files)
+                req.files.map(item => {
+                    const newImage = new Image()
+                    const path = require('path')
+                    const remove = path.join(__dirname ,'..', 'public')
+                    let relPath = item.path.replace(remove, '')
+                    newImage.uri = relPath
+                    newImage.episodeId = episodeId
+                    newImage.save()
+                })
+                const updatedEpisode = await Episode.findByIdAndUpdate(episodeId, 
+                    {
+                        title : req.body.title,
+                        updatedAt : Date().slice(4, 24).toString()
+                    }, 
+                    {new : true, useFindAndModify: false})
+                res.send(updatedEpisode)
+        }
+        catch (err) {
+            console.log(err)
+            res.status(400).send(err)
+        }
+
+    },
+    allImage : async ( req, res ,next) => {
+        try {
+            const {episodeId} = req.params
+            const images = await Image.find({episodeId})
+            if(images) {
+                res.status(200).send(images)
+            }
+            else {
+                res.status(200).send("No data found")
+            }
+        }
+        catch (err) {
+            console.log(err)
+            res.status(400).send("Error get episode data")
+        }
+    },
+
     imageRemove : async(req, res, next) => {
         try {
             const {imageId} = req.params
@@ -92,4 +136,5 @@ module.exports = {
             res.status(400).send("Error removing data")
         }
     }
+
 }
