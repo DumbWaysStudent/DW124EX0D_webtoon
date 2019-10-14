@@ -6,7 +6,7 @@ import {
     Icon,
     Input
 } from 'native-base'
-import ImageAutoChange from '../component/imageslider/ImageAutoChange';
+import SliderImage from '../component/imageslider/SliderImage'
 import { stylesglobe } from '../constant/styles';
 import CardHorizontal from '../component/list/CardHorizontal';
 import VerticalList from '../component/list/VerticalList';
@@ -35,11 +35,11 @@ export default class Home extends Component {
                             <Icon name="ios-search" />
                         </Item>
                     </View>
-                    <ImageAutoChange/>
+                    <SliderImage/>
                     <View style={styles.contFav}>
                         <View style={styles.wrapduajauh}>
-                            <Text style={styles.category}>Favorite</Text>
-                            <Icon name="arrow-forward"/>
+                            <Text style={styles.category}>Favourite</Text>
+                            <Text>See all</Text>
                         </View>
                         <View style={styles.listhorizontal}>
                             <CardHorizontal onPressCard={(item) => navigation.navigate('DetailWebtoon', {dataKomik : item})}/>

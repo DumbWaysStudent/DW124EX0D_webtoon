@@ -6,10 +6,12 @@ import {
     Input
 } from 'native-base'
 import  ImagePicker  from 'react-native-image-picker'
-import { editProfileFunc } from '../function/api';
-import Host from '../environment/Host';
 
+import { connect } from 'react-redux'
+import { getProfile } from '../redux/action/UserAction'
+import { editProfileFunc, getUserToken } from '../function/api';
 
+import Host from '../environment/Host'
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
@@ -19,21 +21,28 @@ class EditProfile extends Component {
         this.state = {
             profilepicture : '' , 
             fullname : '',
-            lastpicture : ''        
+            lastpicture : '',
+            userId : ''        
         }
     }
     componentDidMount() {
         const {userData} = this.props.navigation.state.params
-        this.setState({profilepicture : {uri : userData.profilepicture},lastpicture : {uri : userData.profilepicture} , fullname : userData.fullname})
+        this.setState({
+            profilepicture : {uri : `${Host.imageHost}${userData.profilepicture}`},
+            lastpicture : {uri : `${Host.imageHost}${userData.profilepicture}`} , 
+            fullname : userData.fullname,
+            userId : userData._id
+        })
     }
-    _handleFinishEdit = async () => {
+    _handleFinishEdit =  async () => {
         const formData = new FormData()
         formData.append("fullname" , this.state.fullname)
         if (this.state.profilepicture.uri != this.state.lastpicture.uri) {
             formData.append("profilepicture", this.state.profilepicture)
         }
-        const res = await editProfileFunc(formData)
-        console.log(res.data)
+        await editProfileFunc(formData)
+        const userToken = await getUserToken()
+        await this.props.getProfile(userToken)  
         this.props.navigation.navigate('Profile')
     }
 
@@ -73,9 +82,9 @@ class EditProfile extends Component {
         return (
             <ScrollView style={{ position : 'relative', backgroundColor:'#f7f7f7'}}>
                 <View style={{width : SCREEN_WIDTH , height: SCREEN_HEIGHT/8,}}>
-                <View style={styles.absolutebg}>
+                <View style={styles.headerCustom}>
                     <Text style={styles.texthello}>Edit Profile</Text>
-                    <Icon style={{color : 'white'}} onPress={this._handleFinishEdit} name="checkmark"/>
+                    <Icon style={{color : '#443737'}} onPress={this._handleFinishEdit} name="checkmark"/>
                 </View>
                 </View>
                 <View >
@@ -83,8 +92,8 @@ class EditProfile extends Component {
                         <Image style={styles.avatar} source={{uri :  this.state.profilepicture.uri}}/>   
                         <Icon onPress={this.handleChoosePhoto} name="camera"/>
                     </View>
-                    <View style={{alignItems : "center", marginTop : 50}}>
-                        <Item>
+                    <View style={{alignItems : "center", marginTop : 50, }}>
+                        <Item style={{width : SCREEN_WIDTH*3/4, borderEndWidth : 1}}>
                             <Input
                             onChangeText={text => this.setState({fullname : text})}
                             value={this.state.fullname}
@@ -99,21 +108,21 @@ class EditProfile extends Component {
         );
     }
 }
-
-export default EditProfile
+const mapDispatchToProps = dispatch => {
+    return {
+      getProfile : (userId) => {
+        dispatch(getProfile(userId))
+      }
+    };
+  };
+export default connect(mapDispatchToProps, { getProfile })(EditProfile)
 
 const styles = StyleSheet.create({
-    absolutebg : {
+    headerCustom : {
         padding: 20,
-        backgroundColor: '#443737',
-        position: "absolute",
         flexDirection: "row",
         justifyContent: "space-between",
-        width : SCREEN_WIDTH,
-        borderBottomEndRadius: SCREEN_WIDTH,
-        borderBottomStartRadius: SCREEN_WIDTH,
-        height : SCREEN_HEIGHT/4,
-    },  
+    },
     avatar : {
         padding: 20,
         width: SCREEN_WIDTH/2.5,
@@ -124,7 +133,7 @@ const styles = StyleSheet.create({
     },
     texthello : {
         fontSize: 20,
-        color: 'white',
+        color: '#443737',
         fontFamily: "OpenSans-SemiBold"
     },
     nameInfo : {

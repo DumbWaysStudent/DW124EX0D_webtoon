@@ -50,9 +50,7 @@ export default class Login extends Component {
             password : this.state.password
         }
         const user = await axios.post(`${Host.localhost}/auth` , loginData)
-        console.log(user.data)
         if(user) {
-            console.log(user.data)
             await AsyncStorage.setItem('userToken', user.data );
                 const objJwt = await jwt.decode(
                 user.data, // the token
@@ -61,7 +59,7 @@ export default class Login extends Component {
                     skipValidation: true // to skip signature and exp verification
                 }
                 );
-                await AsyncStorage.setItem('userData',JSON.stringify(objJwt.payload.userData));
+                await AsyncStorage.setItem('userId',JSON.stringify(objJwt.payload.userId));
                 this.props.navigation.navigate('MemberNavigator')
             }
         }
@@ -83,11 +81,12 @@ export default class Login extends Component {
                     value={this.state.email}
                     handleChangeText={text => this.setState({email : text})}
                     secured={false}
-                    keyboardType="email-address" icon={true} iconName="person" label="Username"/>
+                    keyboardType="email-address" icon={true} iconName="person" label="Email"/>
                     <Item floatingLabel>
                             <Icon name="ios-lock" style={styles.iconLock}/>
                             <Label>Password</Label>
                             <Input 
+                            value={this.state.password}
                             autoCapitalize="none"
                             keyboardType="default"
                             secureTextEntry={this.state.shwhidepsw}

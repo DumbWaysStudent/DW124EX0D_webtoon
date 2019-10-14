@@ -21,6 +21,7 @@ export default class Favorit extends Component {
     constructor() {
         super() 
         this.state = {
+            filter : '',
             dataCard :  [{
                 title: 'The Secret of Angel',
                 image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
@@ -39,8 +40,9 @@ export default class Favorit extends Component {
                 <StatusBar
                 backgroundColor="#443737" />
                 <View style={styles.searchbar}>
-                        <Item style={{borderWidth:1}}>
+                        <Item>
                             <Input
+                            onChangeText={(text) => this.setState({filter : text})}
                             placeholder="Search" />
                             <Icon name="ios-search" />
                         </Item>
@@ -49,14 +51,20 @@ export default class Favorit extends Component {
                     data={this.state.dataCard}
                     showsVerticalScrollIndicator={false}
                     renderItem={({item}) =>
+                    // {item.title.toLowerCase().}
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailEpisode', {dataEpisode : item})}>
-                        <View style={styles.wrapContainerFlatlist}>
-                            <View style={styles.borderImage}>
-                                <Image style={styles.imageDilist} source={{uri : item.image}}/>
+                        <View style={[styles.wrapContainerFlatlist, {justifyContent : "space-between"}]}>
+                            <View style={styles.wrapContainerFlatlist}>
+                                <View style={styles.borderImage}>
+                                    <Image style={styles.imageDilist} source={{uri : item.image}}/>
+                                </View>
+                                <View style={styles.infoComic}>
+                                    <Text style={styles.textInfoComic}>{item.title}</Text>
+                                    <Text>80 Favourite</Text>
+                                </View>
                             </View>
-                            <View style={styles.infoComic}>
-                                <Text style={styles.textInfoComic}>{item.title}</Text>
-                                <Text>80 Favourite</Text>
+                            <View style={{justifyContent : "center"}}>
+                                <Icon name="star" style={{color : "red"}}/>
                             </View>
                         </View>
                     </TouchableOpacity>
@@ -74,11 +82,11 @@ const styles= StyleSheet.create({
         padding : 20
     },
     searchbar : {
-        paddingBottom : 15,
+        paddingBottom : 5,
     },
     imageDilist : {
-        width : width/4,
-        height : width/4,
+        width : width/5,
+        height : width/5,
     },
     wrapContainerFlatlist : {
         flexDirection: 'row', 
@@ -86,6 +94,6 @@ const styles= StyleSheet.create({
     },
     infoComic : {
         paddingLeft : 10,
-        justifyContent : "center"
+        justifyContent : "space-around",
     },
 })

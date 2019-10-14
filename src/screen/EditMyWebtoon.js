@@ -91,7 +91,7 @@ export default class EditMyWebtoon extends Component {
                         <Text style={{color : "white"}}>ADD EPISODE</Text>
                     </Button>
                     <Button onPress={this._handleDeleteWebtoon} style={styles.deleteAdd}>
-                        <Text style={{color : "white"}}>DELETE WEBTOON</Text>
+                        <Text style={{color : "red"}}>DELETE WEBTOON</Text>
                     </Button>
                 </View>    
             </View>
@@ -147,6 +147,6 @@ const styles = StyleSheet.create({
     deleteAdd : {
         marginTop : 20,
         justifyContent : "center",
-        backgroundColor : 'red'
+        backgroundColor : 'white'
     }
 })

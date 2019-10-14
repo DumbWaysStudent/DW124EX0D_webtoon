@@ -16,10 +16,8 @@ class CheckUser extends Component {
     try {
       //Cek Token Pas Awal
       const userToken = await AsyncStorage.getItem('userToken');
-      const userData = await AsyncStorage.getItem('userData');
-      console.log(`userToken : ${userToken}`)
-      console.log(`userData : ${userData}`)
-      if (userData != null) {
+      const userId = await AsyncStorage.getItem('userId');
+      if (userId != null) {
         this.props.navigation.navigate('MemberNavigator')
       }
       else {

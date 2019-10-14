@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     },
     wrapImage : {
         width ,
-        borderWidth : 4
+        borderWidth : 2
     },
     imageDilist : {
         width : width/6,
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
         padding : 30
     },
     borderImage : {
-        borderWidth : 4
+        borderWidth : 2
     },
     infoComic : {
         paddingLeft : 10,

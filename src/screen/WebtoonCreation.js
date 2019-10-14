@@ -10,7 +10,9 @@ import {
  } from 'react-native';
  import Icon from 'react-native-vector-icons/FontAwesome5'
 import HeaderComp from '../component/header/HeaderComp';
-
+import { getUserToken, getUserId } from '../function/api';
+import axios from 'axios'
+import Host from '../environment/Host'
 const height = Dimensions.get("window").height
 const width = Dimensions.get("window").width
 
@@ -18,19 +20,21 @@ export default class WebtoonCreation extends Component {
     constructor() {
         super() 
         this.state = {
-            data : [{
-                episodes : 1,
-                title: 'The Secret of Angel',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-              }, {
-                episodes : 15,
-                title: 'Pasutri Gaje',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-              }, {
-                episodes : 32,
-                title: 'Young Mom',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-              }]
+            data : null
+        }
+    }
+
+    async componentDidMount() {
+        const userToken = await getUserToken()
+        const userId = await getUserId()
+            if(userToken) {
+                const response = await axios.get(`${Host.localhost}/webtoons/${userId}`, 
+                        {
+                            headers: {"Authorization" : `Bearer ${userToken}`}
+                        }
+                    )
+                this.setState({data : response.data})
+            
         }
     }
     render() {
@@ -44,18 +48,18 @@ export default class WebtoonCreation extends Component {
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('EditMyWebtoon', {dataEdit : item})}>
                         <View style={styles.wrapContainerFlatlist}>
                             <View style={styles.borderImage}>
-                                <Image style={styles.imageDilist} source={{uri : item.image}}/>
+                                <Image style={styles.imageDilist} source={{uri : `${Host.imageHost}${item.episodes[0].episodesContent[0]}`}}/>
                             </View>
                             <View style={styles.infoComic}>
-                                <Text style={styles.textInfoComic}>{item.title}</Text>
-                                <Text>{item.episodes}</Text>
+                                <Text style={styles.textInfoComic}>{item.webtoonTitle}</Text>
+                                <Text>{item.episodes.length} episode {item.episodes.length > 1 ? <Text>(s)</Text> : null}</Text>
                             </View>
                         </View>
                     </TouchableOpacity>
                     }
                     keyExtractor={(item, index) => index.toString()}
                 />
-                <View style={{position:'absolute',bottom:0,alignSelf:'flex-end'}}>
+                <View style={{position:'absolute',bottom:10,alignSelf:'flex-end', padding :25}}>
                     <Icon style={styles.icon} color="#443737" name="plus-circle"
                     onPress={() => this.props.navigation.navigate('CreateWebtoon')}
                     />
@@ -76,7 +80,7 @@ const styles = StyleSheet.create({
         padding : 30
     },
     borderImage : {
-        borderWidth : 4
+        borderWidth : 2
     },
     infoComic : {
         paddingLeft : 10,
@@ -84,7 +88,7 @@ const styles = StyleSheet.create({
     },
     textInfoComic : {
         fontFamily : 'Courgette-Regular',
-        fontWeight : 'bold',
+        fontWeight : '600',
         paddingBottom : 10,
         fontSize : 18
     },
@@ -94,6 +98,6 @@ const styles = StyleSheet.create({
         paddingTop:20
     },
     icon : {
-        fontSize : 60,
+        fontSize : 50,
     }
 })

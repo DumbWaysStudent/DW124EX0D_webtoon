@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import {View} from 'react-native'
 import Slideshow from 'react-native-image-slider-show';
-export default class ImageAutoChange extends Component {
+
+
+export default class SliderImage extends Component {
   constructor(props) {
     super(props);
     this.state = {

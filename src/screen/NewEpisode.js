@@ -14,30 +14,23 @@ import {
 import ImagePicker from 'react-native-image-picker'
 import HeaderComp from '../component/header/HeaderComp';
 
+import { newEpisode } from '../function/api';
+
+import { connect } from 'react-redux'
+import { addEpisode } from '../redux/action/WebtoonAction'
+
 
 const width = Dimensions.get('window').width
-const height = Dimensions.get('window').height
 
-export default class NewEpisode extends Component {
+class NewEpisode extends Component {
     constructor() {
         super() 
         this.state = {
-            episodename : '',
-            episodes : [{
-                episodes : 1,
-                name: 'The Secret of Angel',
-                uri: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-              }, {
-                episodes : 15,
-                name: 'Pasutri Gaje',
-                uri: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-              }, {
-                episodes : 32,
-                name: 'Young Mom',
-                uri: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-              }]
+            episodeName : '',
+            episodesContent : []
         }
     }
+
 
     handleChoosePhoto = () => {
         const options = {
@@ -64,12 +57,16 @@ export default class NewEpisode extends Component {
               // You can also display the image using data:
               // const source = { uri: 'data:image/jpeg;base64,' + response.data };
               const source = tmpPhoto;
-              this.state.episodes.push(source)
+              this.state.episodesContent.push(source)
               this.setState({})
             }
           });
       };
-    _handleFinishNewEpisode = () => {
+
+    _handleFinishNewEpisode = async () => {
+        const episodeData = await newEpisode(this.state)
+        console.log(episodeData)
+        this.props.addEpisode(episodeData)
         this.props.navigation.navigate('CreateWebtoon')
     }
     render() {
@@ -83,14 +80,14 @@ export default class NewEpisode extends Component {
                         <Text style={styles.titleStyle}>Name</Text>
                         <TextInput
                         style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                        onChangeText={text => this.setState({ webtoontitle : text})}
-                        value={this.state.webtoontitle}
+                        onChangeText={text => this.setState({ episodeName : text})}
+                        value={this.state.episodeName}
                         />
                     </View>
                     <View>
                         <Text style={styles.titleStyle}>Add Images</Text>
                         <FlatList
-                        data={this.state.episodes}
+                        data={this.state.episodesContent}
                         renderItem={({ item }) => 
                         <View style={{paddingBottom :5}}>
                             <View style={{flexDirection : "row"}}>
@@ -116,6 +113,15 @@ export default class NewEpisode extends Component {
     }
 }
 
+function mapStateToProps(state) {
+    return {
+      episodes : state.webtoonReducer.episodesData
+    };
+  }
+export default connect(
+    mapStateToProps,
+    { addEpisode }
+  )(NewEpisode)
 const styles = StyleSheet.create({
     bodyContainer : {
         padding : 30,

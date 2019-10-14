@@ -22,8 +22,6 @@ import jwt from "react-native-pure-jwt";
 import Host from '../environment/Host'
 import { emailvalid } from '../function/validation';
 
-const height = Dimensions.get('window').height
-
 
 export default class Register extends Component {
     constructor() {
@@ -43,7 +41,7 @@ export default class Register extends Component {
             email,
             password,
         }
-        const user = await axios.post(`${Host.localhost}/users`, Data)
+        const user = await axios.post(`${Host.localhost}/register`, Data)
         if(user) {
             await AsyncStorage.setItem('userToken', user.data );
                 const objJwt = await jwt.decode(
@@ -53,7 +51,7 @@ export default class Register extends Component {
                     skipValidation: true // to skip signature and exp verification
                 }
                 );
-                await AsyncStorage.setItem('userData',JSON.stringify(objJwt.payload.userData));
+                await AsyncStorage.setItem('userId',JSON.stringify(objJwt.payload.userId));
                 this.props.navigation.navigate('MemberNavigator')
             }
     }

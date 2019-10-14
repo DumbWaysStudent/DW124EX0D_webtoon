@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { createStore, combineReducers, applyMiddleware} from 'redux'
 import thunkMiddleware from 'redux-thunk'
 
-import userReducer from '../reducer/UserReducer'
-
+import userReducer from '../reducer/userReducer'
+import webtoonReducer from '../reducer/webtoonReducer'
 const reducer = combineReducers({
-    userReducer
+    userReducer,
+    webtoonReducer
 })
 
 const store = createStore(reducer , applyMiddleware(thunkMiddleware))

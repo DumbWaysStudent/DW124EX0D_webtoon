@@ -6,32 +6,37 @@ import {
 } from 'native-base'
 import HeaderComp from '../component/header/HeaderComp';
 
+import { connect } from 'react-redux'
+import Host from '../environment/Host';
+import { newWebtoon } from '../function/api';
 
 const height = Dimensions.get("window").height
 const width = Dimensions.get("window").width
 
-export default class CreateWebtoon extends Component {
+class CreateWebtoon extends Component {
     constructor() {
         super() 
         this.state = {
-            webtoontitle : '',
-            episodeList : [{
-                episodes : 1,
-                title: 'The Secret of Angel',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-              }, {
-                episodes : 15,
-                title: 'Pasutri Gaje',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-              }, {
-                episodes : 32,
-                title: 'Young Mom',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-              }]
+            data : {
+                webtoonTitle : '',
+                episodes : []
+            },
+            errorMsg : ''
+            
         }
     }
-    _handleFinishWebtoon = () => {
-        this.props.navigation.navigate('WebtoonCreation')
+    _handleFinishWebtoon = async () => {
+        if(this.state.data.webtoonTitle != '') {
+            this.props.episodesData.map(
+                item => this.state.data.episodes.push(item._id)
+                )
+            await newWebtoon(this.state.data)
+            this.props.navigation.navigate('WebtoonCreation')
+        }
+        else {
+            this.setState({errorMsg : "Title tidak boleh kosong"})
+        }
+        
     }
     render() {
         return (
@@ -44,24 +49,25 @@ export default class CreateWebtoon extends Component {
                         <Text style={styles.titleStyle}>Title</Text>
                         <TextInput
                         style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                        onChangeText={text => this.setState({ webtoontitle : text})}
-                        value={this.state.webtoontitle}
+                        onChangeText={text => this.setState({ data :{...this.state.data,  webtoonTitle : text}})}
+                        value={this.state.data.webtoonTitle}
                         />
+                        <Text style={styles.errorText}>{this.state.errorMsg}</Text>
                     </View>
                     <View style={styles.episodeCont}>
                         <Text style={styles.titleStyle}>Episode</Text>
                         <FlatList
-                            data={this.state.episodeList}
+                            data={this.props.episodesData}
                             showsVerticalScrollIndicator={false}
                             renderItem={({item}) =>
                             // <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailEpisode', {dataEpisode : item})}>
                                 <View style={styles.wrapContainerFlatlist}>
                                     <View style={styles.borderImage}>
-                                        <Image style={styles.imageDilist} source={{uri : item.image}}/>
+                                        <Image style={styles.imageDilist} source={{uri : `${Host.imageHost}${item.episodesContent[0]}`}}/>
                                     </View>
                                     <View style={styles.infoComic}>
-                                        <Text style={styles.textInfoComic}>{item.title}</Text>
-                                        <Text>{item.episodes}</Text>
+                                        <Text style={styles.textInfoComic}>{item.episodeName}</Text>
+                                        <Text>{item.createdAt}</Text>
                                     </View>
                                 </View>
                             // </TouchableOpacity>
@@ -77,6 +83,16 @@ export default class CreateWebtoon extends Component {
         );
     }
 }
+function mapStateToProps(state) {
+    return {
+      episodesData : state.webtoonReducer.episodesData
+    };
+  }
+export default connect(
+    mapStateToProps,
+    null
+  )(CreateWebtoon)
+
 
 const styles = StyleSheet.create({
     container : {
@@ -120,7 +136,13 @@ const styles = StyleSheet.create({
     },
     btnAdd : {
         marginTop : 20,
+        bottom : 0,
+        position : "absolute",
         justifyContent : "center",
-        backgroundColor : '#443737'
+        backgroundColor : '#443737',
+        width 
+    },
+    errorText : {
+        color : 'red'
     }
 })

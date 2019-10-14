@@ -4,10 +4,11 @@ import {
     Icon,
     Button
 } from 'native-base'
-import { getUser, getUserId } from '../function/api';
+import {getUserToken } from '../function/api';
 import AsyncStorage from '@react-native-community/async-storage'
 import { connect } from 'react-redux'
 import {getProfile} from '../redux/action/UserAction'
+import Host from '../environment/Host'
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
@@ -20,12 +21,8 @@ class Profile extends Component {
     }
     
     async componentDidMount() {
-    //    const userData = await getUser()
-    //    this.setState({userData})
-    //    console.log(userData)
-    const a = await getUserId()
-    await this.props.getProfile(a)
-        
+        const a = await getUserToken()
+        await this.props.getProfile(a)  
     }
     onPressLogout = async () => {
         try {
@@ -46,15 +43,14 @@ class Profile extends Component {
                 <StatusBar
                 backgroundColor="#443737" />
                 <View style={{width : SCREEN_WIDTH , height: SCREEN_HEIGHT/8,}}>
-                    <View style={styles.absolutebg}>
+                    <View style={styles.headerCustom}>
                         <Text style={styles.texthello}> Profile</Text>
-                        <Icon style={{color : 'white'}} onPress={() => this.props.navigation.navigate('EditProfile', {userData : this.props.userData})} name="create"/>
+                        <Icon style={{color : '#443737'}} onPress={() => this.props.navigation.navigate('EditProfile', {userData : this.props.userData})} name="create"/>
                     </View>
                 </View>
                 <View >
                     <View style={{alignItems:"center", }}>
-                    {/* `${Host.localhost}${this.state.userData.profilepicture}` */}
-                        <Image style={styles.avatar} source={{uri : this.props.userData.profilepicture}}/>
+                        <Image style={styles.avatar} source={{uri : `${Host.imageHost}${this.props.userData.profilepicture}`}}/>
                         <Text style={styles.nameInfo}>{this.props.userData.fullname}</Text>
                     </View>
                     <View style={styles.action} >
@@ -62,7 +58,7 @@ class Profile extends Component {
                         onPress={() => this.props.navigation.navigate('WebtoonCreation')}
                         style={styles.touchableX}>
                             <View style={styles.wrapItemTou}>
-                                <Text>My Webtoon Creation</Text>
+                                <Text>MY WEBTOON CREATION</Text>
                                 <Icon name="fastforward"/>
                             </View>
                         </TouchableOpacity> 
@@ -75,11 +71,13 @@ class Profile extends Component {
         );
     }
 }
+
 function mapStateToProps(state) {
     return {
       userData: state.userReducer.userData
     };
   }
+
   
 
 export default connect(
@@ -88,16 +86,10 @@ export default connect(
   )(Profile)
 
 const styles = StyleSheet.create({
-    absolutebg : {
+    headerCustom : {
         padding: 20,
-        backgroundColor: '#443737',
-        position: "absolute",
         flexDirection: "row",
         justifyContent: "space-between",
-        width : SCREEN_WIDTH,
-        borderBottomEndRadius: SCREEN_WIDTH,
-        borderBottomStartRadius: SCREEN_WIDTH,
-        height : SCREEN_HEIGHT/4,
     },  
     avatar : {
         padding: 20,
@@ -109,7 +101,7 @@ const styles = StyleSheet.create({
     },
     texthello : {
         fontSize: 20,
-        color: 'white',
+        color: '#443737',
         fontFamily: "OpenSans-SemiBold"
     },
     logout : {

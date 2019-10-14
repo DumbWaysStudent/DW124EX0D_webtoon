@@ -1,9 +1,11 @@
 import Host from '../../environment/Host'
 import Axios from 'axios'
 
-export const getProfile = (userId) => async(dispatch) => {
+export const getProfile = (userToken) => async(dispatch) => {
     try {
-    const result = await Axios.get(`${Host.localhost}/users/${userId}`)
+    const result = await Axios.get(`${Host.localhost}/user`, {
+        headers: {"Authorization" : `Bearer ${userToken}`}
+    })
         if(result) {
         dispatch({
             type : "GET_PROFILE",

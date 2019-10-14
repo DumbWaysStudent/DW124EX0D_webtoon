@@ -14,7 +14,7 @@ import {
 } from 'native-base'
 import ImagePicker from 'react-native-image-picker'
 import HeaderComp from '../component/header/HeaderComp';
-
+import {ButtonKecil} from '../component/button/ButtonLogReg'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -117,6 +117,7 @@ export default class EditEpisodeScreen extends Component {
                                     <Text>
                                         {item.name}
                                     </Text>
+                                    <ButtonKecil namaButton="Delete"/>
                                  </View>
                             </View>
                         </View>   
@@ -128,7 +129,7 @@ export default class EditEpisodeScreen extends Component {
                         <Text style={styles.txtBtn}>+ IMAGE</Text>
                     </Button>
                     <Button onPress={this._handleDeleteEpisode} style={styles.deleteAdd}>
-                        <Text style={{color : "white"}}>DELETE EPISODE</Text>
+                        <Text style={{color : "red"}}>DELETE EPISODE</Text>
                     </Button>
 
                 </View>
@@ -161,6 +162,6 @@ const styles = StyleSheet.create({
     deleteAdd : {
         marginTop : 20,
         justifyContent : "center",
-        backgroundColor : 'red'
+        backgroundColor : 'white'
     }
 })
