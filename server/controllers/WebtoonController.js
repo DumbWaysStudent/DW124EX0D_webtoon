@@ -13,17 +13,6 @@ module.exports = {
             res.status(400).send('Error getting Webtoon data')
         }
     },
-//     showUserWebtoon : async (req, res, next) => {
-//         const user = await User.findById(req.userId)
-//         if(user) {
-//             const {userId, } = req.params
-//             const userWebtoon = await Webtoon.aggregate(
-//                 [ { $match : { userId : mongoose.Types.ObjectId(userId) } } ]
-//             )
-// await Episode.populate(userWebtoon, {path: "episodes"})
-//             res.status(200).send(userWebtoon)
-//         }
-//     },
 
     store : async(req, res, next) => {
         const user = await User.findById(req.userId)
