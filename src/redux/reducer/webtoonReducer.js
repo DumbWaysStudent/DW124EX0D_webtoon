@@ -1,28 +1,34 @@
 const initialState = {
-    episodesData : [],
-    webtoonTitle : '',
     webtoonData : [],
-    error : false
+    episodesData : [],
+    isLoading : true,
+    errorWebtoon : false,
+    errorEpisode : false
 }
 
 const webtoonReducer = (state = initialState, actions) => {
     switch(actions.type) {
-        case "ADD_EPISODE" :
-            const newData = actions.payload
+        case "GET_WEBTOON_EPISODES" :
             return {
                 ...state,
-                episodesData : [...state.episodesData,newData]
+                episodesData : actions.payload.data
             }
-
+        case "GET_EPISODES_ERROR" : 
+            return {
+                ...state,
+                errorEpisode : true,
+            }  
         case "GET_USER_WEBTOON" :
             return {
                 ...state,
                 webtoonData : actions.payload.data,
+                isLoading : false
             }
         case "GET_WEBTOON_ERROR" : 
             return {
                 ...state,
-                error : true,
+                errorWebtoon : true,
+                isLoading : false
             }      
         default : 
             return state            

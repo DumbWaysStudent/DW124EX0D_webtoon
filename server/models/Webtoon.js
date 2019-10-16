@@ -10,10 +10,12 @@ const WebtoonSchema = new Schema({
         type : String,
     },
     createdAt : {
-        type : String
+        type : Date,
+        default : Date.now
     },
     updatedAt : {
-        type : String
+        type : Date,
+        default : Date.now
     },
     createdBy : {
         type : Schema.Types.ObjectId,
@@ -21,6 +23,12 @@ const WebtoonSchema = new Schema({
     },
     coverImage : {
         type : String
+    },
+    episodes : {
+        type : Number
+    },
+    favoriteBy : {
+        type : Number
     }
 })
 

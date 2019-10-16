@@ -8,6 +8,7 @@ import Favorit from '../screen/Favorit'
 import EditProfile from '../screen/EditProfile'
 
 import Icon from 'react-native-vector-icons/Ionicons'
+import AllWebtoon from '../screen/AllWebtoon';
 
 const ProfileNavigator = createStackNavigator({
   Profile : {
@@ -24,9 +25,25 @@ const ProfileNavigator = createStackNavigator({
 }
 })
 
+const HomeNavigator = createStackNavigator({
+  Home : {
+    screen : Home,
+    navigationOptions : {
+      header : null
+    }
+  },
+  AllWebtoon : {
+    screen : AllWebtoon,
+    navigationOptions : {
+        headerTitle : "All Webtoon"
+    }
+}
+})
+
+
 const BottomTabNavigator =  createBottomTabNavigator({
-    Home: {
-      screen: Home,
+    HomeNavigator: {
+      screen: HomeNavigator,
       navigationOptions: {
         tabBarLabel: 'FOR YOU',
         tabBarIcon: ({ tintColor }) => (

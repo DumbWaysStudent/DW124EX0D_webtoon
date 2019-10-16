@@ -7,15 +7,19 @@ const EpisodeSchema = new Schema ({
         required : true
     },
     createdAt : {
-        type : String,
+        type : Date,
+        default : Date.now
     },
     webtoonId : {
         type : Schema.Types.ObjectId,
         required : true
     },
     updatedAt : {
-        type : String,
-        required : true
+        type : Date,
+        default : Date.now
+    },
+    thumbnail : {
+        type : String
     }
 })
 

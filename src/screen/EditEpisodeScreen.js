@@ -12,9 +12,11 @@ import {
 import {
     Button
 } from 'native-base'
+import Host from '../environment/Host'
 import ImagePicker from 'react-native-image-picker'
 import HeaderComp from '../component/header/HeaderComp';
 import {ButtonKecil} from '../component/button/ButtonLogReg'
+import { getEpisodeImage, deleteEpisode, deleteEpisodeImage, editEpisodeWebtoon } from '../function/api';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -23,26 +25,21 @@ export default class EditEpisodeScreen extends Component {
     constructor() {
         super() 
         this.state = {
-            dataEpisode : {title : ''},
-            episodes : [{
-                episodes : 1,
-                name: 'The Secret of Angel',
-                uri: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-              }, {
-                episodes : 15,
-                name: 'Pasutri Gaje',
-                uri: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-              }, {
-                episodes : 32,
-                name: 'Young Mom',
-                uri: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-              }]
+            dataEpisode : null,
+            imageData : [], 
+            webtoonId : '',
+            data : {
+                title : '',
+                newImage : [],
+            }   
         }
     }
 
-    componentDidMount() {
-        const {dataEpisode} = this.props.navigation.state.params
-        this.setState({dataEpisode})
+    async componentDidMount() {
+        const {dataEpisode, webtoonId} = this.props.navigation.state.params
+        this.setState({dataEpisode, data  :{...this.state.data,title :  dataEpisode.title}, webtoonId})
+        const imageData = await getEpisodeImage(dataEpisode._id, webtoonId)
+        this.setState({imageData})
     }
     handleChoosePhoto = () => {
         const options = {
@@ -69,13 +66,28 @@ export default class EditEpisodeScreen extends Component {
               // You can also display the image using data:
               // const source = { uri: 'data:image/jpeg;base64,' + response.data };
               const source = tmpPhoto;
-              this.state.episodes.push(source)
+              this.state.data.newImage.push(source)
               this.setState({})
             }
           });
       };
-    _handleFinishEditEpisode = () => {
+    _handleFinishEditEpisode = async () => {
+        const formData = new FormData()
+        formData.append("title" , this.state.data.title)
+        if(this.state.data.newImage.length > 0) {
+            this.state.data.newImage.forEach(content => {
+                formData.append("contentImage", content);
+              });
+        }      
+        await editEpisodeWebtoon(formData, this.state.dataEpisode._id, this.state.webtoonId)
+        this.props.navigation.state.params.updateData()
         this.props.navigation.goBack()
+    }
+
+    handleDeleteStoreImage = async (imageId) => {
+        await deleteEpisodeImage(imageId , this.state.dataEpisode._id, this.state.webtoonId)
+        const imageData = await getEpisodeImage(this.state.dataEpisode._id, this.state.webtoonId)
+        this.setState({imageData})
     }
     _handleDeleteEpisode = () => {
         Alert.alert(
@@ -83,12 +95,15 @@ export default class EditEpisodeScreen extends Component {
             '',
             [
               {text: 'No', onPress: () => {}},
-              {text: 'Yes', onPress: () => this.props.navigation.goBack()},
+              {text: 'Yes', onPress: async () => {
+                await deleteEpisode(this.state.dataEpisode._id, this.state.webtoonId)
+                this.props.navigation.state.params.updateData()
+                this.props.navigation.goBack()
+                
+                }},
             ],
-            {cancelable: false},
+            {cancelable: true},
           );
-        // let webtoonId = this.state.webtoondata._id
-        // this.props.navigation.navigate('WebtoonCreation')
     }
     render() {
         return (
@@ -101,26 +116,44 @@ export default class EditEpisodeScreen extends Component {
                         <Text style={styles.titleStyle}>Name</Text>
                         <TextInput
                         style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                        onChangeText={text => this.setState({ dataEpisode : {...this.state.dataEpisode,title : text}})}
-                        value={this.state.dataEpisode.title}
+                        onChangeText={text => this.setState({data : {...this.state.data,title : text } })}
+                        value={this.state.data.title}
                         />
                     </View>
-                    <View>
                         <Text style={styles.titleStyle}>Add Images</Text>
                         <FlatList
-                        data={this.state.episodes}
+                        data={this.state.imageData}
+                        renderItem={({ item }) => 
+                        <View style={{paddingBottom : 5}}>
+                            <View style={{flexDirection : "row"}}>
+                                <Image style={styles.imageList} source={{uri : `${Host.imageHost}${item.uri}`}} />
+                                <View style={{paddingLeft : 20, justifyContent : "center"}}>
+                                    {item.name ? <Text>
+                                        {item.name}
+                                    </Text> : null}
+                                    <ButtonKecil onPressButton={() => this.handleDeleteStoreImage(item._id)} namaButton="Delete"/>
+                                 </View>
+                            </View>
+                        </View>
+                           
+                    }
+                        keyExtractor={(item,index) => index.toString()}
+                        />
+                        <FlatList
+                        data={this.state.data.newImage}
                         renderItem={({ item }) => 
                         <View style={{paddingBottom : 5}}>
                             <View style={{flexDirection : "row"}}>
                                 <Image style={styles.imageList} source={{uri : item.uri}} />
-                                <View style={{justifyContent : "center"}}>
+                                <View style={{paddingLeft : 20, justifyContent : "center"}}>
                                     <Text>
                                         {item.name}
                                     </Text>
                                     <ButtonKecil namaButton="Delete"/>
                                  </View>
                             </View>
-                        </View>   
+                        </View>
+                           
                     }
                         keyExtractor={(item,index) => index.toString()}
                         />
@@ -132,7 +165,6 @@ export default class EditEpisodeScreen extends Component {
                         <Text style={{color : "red"}}>DELETE EPISODE</Text>
                     </Button>
 
-                </View>
             </View>
         );
     }
@@ -163,5 +195,5 @@ const styles = StyleSheet.create({
         marginTop : 20,
         justifyContent : "center",
         backgroundColor : 'white'
-    }
+    },
 })

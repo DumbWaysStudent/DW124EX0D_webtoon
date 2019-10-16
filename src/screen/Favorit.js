@@ -12,30 +12,45 @@ import {
 import {
     Item,
     Icon,
-    Input
+    Input,
+
 } from 'native-base'
 
+import {connect} from 'react-redux'
+import {getUserFav} from '../redux/action/favAction'
+import { getUserId, getUserToken } from '../function/api';
+import Host from '../environment/Host';
+import Axios from 'axios';
 const width = Dimensions.get("window").width
 
-export default class Favorit extends Component {
+class Favorit extends Component {
     constructor() {
         super() 
         this.state = {
             filter : '',
-            dataCard :  [{
-                title: 'The Secret of Angel',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-          }, {
-                title: 'Pasutri Gaje',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-          }, {
-                title: 'Young Mom',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-          }]
         }
+    }
+
+     componentDidMount() {
+        this.refreshUserFav()
+    }
+
+    refreshUserFav = async () => {
+        const userId = await getUserId()
+        const userToken = await getUserToken()
+        await this.props.getUserFav(userId, userToken)
+    }
+    handleDeleteFav = async (favoritId) => {
+        const userId = await getUserId()
+        const userToken = await getUserToken()
+        await Axios.delete(`${Host.localhost}/user/${userId}/favorite/${favoritId}`, 
+        { headers: {"Authorization" : `Bearer ${userToken}`}}
+        )
+        this.refreshUserFav()
     }
     render() {
         return (
+
             <View style={styles.container}>
                 <StatusBar
                 backgroundColor="#443737" />
@@ -48,23 +63,23 @@ export default class Favorit extends Component {
                         </Item>
                 </View>
                 <FlatList
-                    data={this.state.dataCard}
+                    data={this.props.userFav.favoritData}
                     showsVerticalScrollIndicator={false}
                     renderItem={({item}) =>
                     // {item.title.toLowerCase().}
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailEpisode', {dataEpisode : item})}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailWebtoon', {webtoonData : item.webtoonId})}>
                         <View style={[styles.wrapContainerFlatlist, {justifyContent : "space-between"}]}>
                             <View style={styles.wrapContainerFlatlist}>
                                 <View style={styles.borderImage}>
-                                    <Image style={styles.imageDilist} source={{uri : item.image}}/>
+                                    <Image style={styles.imageDilist} source={{uri : `${Host.imageHost}${item.webtoonId.coverImage}`}}/>
                                 </View>
                                 <View style={styles.infoComic}>
-                                    <Text style={styles.textInfoComic}>{item.title}</Text>
+                                    <Text style={styles.textInfoComic}>{item.webtoonId.title}</Text>
                                     <Text>80 Favourite</Text>
                                 </View>
                             </View>
                             <View style={{justifyContent : "center"}}>
-                                <Icon name="star" style={{color : "red"}}/>
+                                <Icon onPress={() => this.handleDeleteFav(item._id)} name="star" style={{color : "red"}}/>
                             </View>
                         </View>
                     </TouchableOpacity>
@@ -76,6 +91,20 @@ export default class Favorit extends Component {
     }
 }
 
+
+function mapStateToProps(state) {
+    return {
+      userFav: state.favoriteReducer
+    };
+  }
+
+
+export default connect(
+    mapStateToProps,
+    { getUserFav }
+  )(Favorit)
+
+
 const styles= StyleSheet.create({
     container : {
         flex : 1,
@@ -85,12 +114,12 @@ const styles= StyleSheet.create({
         paddingBottom : 5,
     },
     imageDilist : {
-        width : width/5,
-        height : width/5,
+        width : width/4,
+        height : width/4,
     },
     wrapContainerFlatlist : {
         flexDirection: 'row', 
-        paddingTop:20
+        paddingTop:8
     },
     infoComic : {
         paddingLeft : 10,

@@ -17,7 +17,7 @@ app.group('/api/v1', router => {
     router.delete("/user/:userId/webtoon/:webtoonId/episode/:episodeId", authentication,EpisodeController.remove)
     router.put("/user/:userId/webtoon/:webtoonId/episode/:episodeId",upload.array("contentImage", 15), authentication,EpisodeController.update)
     
-    router.get("/user/:userId/webtoon/:webtoonId/episode/:episodeId/images",EpisodeController.allImage)
+    router.get("/webtoon/:webtoonId/episode/:episodeId/images",EpisodeController.allImage)
     router.delete("/user/:userId/webtoon/:webtoonId/episode/:episodeId/image/:imageId", authentication,EpisodeController.imageRemove)
 }) 
 

@@ -16,19 +16,21 @@ import HeaderComp from '../component/header/HeaderComp';
 
 import { newEpisode } from '../function/api';
 
-import { connect } from 'react-redux'
-import { addEpisode } from '../redux/action/WebtoonAction'
-
 
 const width = Dimensions.get('window').width
 
-class NewEpisode extends Component {
+export default class NewEpisode extends Component {
     constructor() {
         super() 
         this.state = {
-            episodeName : '',
-            episodesContent : []
+            title : '',
+            contentImage : [],
+            webtoonId : ''
         }
+    }
+    componentDidMount() {
+        const {webtoonId} = this.props.navigation.state.params
+        this.setState({webtoonId})
     }
 
 
@@ -57,17 +59,16 @@ class NewEpisode extends Component {
               // You can also display the image using data:
               // const source = { uri: 'data:image/jpeg;base64,' + response.data };
               const source = tmpPhoto;
-              this.state.episodesContent.push(source)
+              this.state.contentImage.push(source)
               this.setState({})
             }
           });
       };
 
     _handleFinishNewEpisode = async () => {
-        const episodeData = await newEpisode(this.state)
-        console.log(episodeData)
-        this.props.addEpisode(episodeData)
-        this.props.navigation.navigate('CreateWebtoon')
+        await newEpisode(this.state)
+        this.props.navigation.state.params.updateData();
+        this.props.navigation.goBack()
     }
     render() {
         return (
@@ -77,17 +78,18 @@ class NewEpisode extends Component {
                 title="Create Episode" onPressBack={() => this.props.navigation.goBack()}/>
                 <View style={styles.bodyContainer}>
                     <View>
-                        <Text style={styles.titleStyle}>Name</Text>
+                        <Text style={styles.titleStyle}>Episode</Text>
                         <TextInput
                         style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                        onChangeText={text => this.setState({ episodeName : text})}
-                        value={this.state.episodeName}
+                        keyboardType="numeric"
+                        onChangeText={text => this.setState({ title : text})}
+                        value={this.state.title}
                         />
                     </View>
                     <View>
                         <Text style={styles.titleStyle}>Add Images</Text>
                         <FlatList
-                        data={this.state.episodesContent}
+                        data={this.state.contentImage}
                         renderItem={({ item }) => 
                         <View style={{paddingBottom :5}}>
                             <View style={{flexDirection : "row"}}>
@@ -113,15 +115,6 @@ class NewEpisode extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-      episodes : state.webtoonReducer.episodesData
-    };
-  }
-export default connect(
-    mapStateToProps,
-    { addEpisode }
-  )(NewEpisode)
 const styles = StyleSheet.create({
     bodyContainer : {
         padding : 30,

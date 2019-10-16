@@ -17,7 +17,7 @@ module.exports = {
     showUserWebtoon : async(req, res, next) => {
         const {userId} = req.params
         try {
-            const userWebtoon =await  Webtoon.find({createdBy : userId})
+            const userWebtoon =await Webtoon.find({createdBy : userId})
             if(userWebtoon){
                 res.status(200).send(userWebtoon)
             }else {
@@ -41,9 +41,9 @@ module.exports = {
             const remove = path.join(__dirname , '..', 'public')
             const relPath = req.file.path.replace(remove, '')
             newWebtoon.coverImage = relPath
+            newWebtoon.episodes = 0
+            newWebtoon.favoriteBy = 0
             newWebtoon.createdBy = userId
-            newWebtoon.createdAt = Date().slice(4, 24).toString()
-            newWebtoon.updatedAt = Date().slice(4, 24).toString()
             await newWebtoon.save()
             res.status(201).send(newWebtoon)
         }
@@ -51,11 +51,16 @@ module.exports = {
             res.status(400).send(err)
         }
     },
-    
+    sortByDate : async(req, res, next) => {
+        await Webtoon.find({}).sort({"createdAt":-1}).exec(function(err, doc) {
+             res.send(doc)
+         })
+    },
     filteredShow : async (req, res, next) => {
         const {input} = req.params
         try {
-            const result = await Webtoon.find({title : input})
+            const userRegex = new RegExp(input, 'i')
+            const result = await Webtoon.find({title : userRegex})
             res.status(200).send(result)
         }catch (err) {
             console.log(err)
@@ -77,11 +82,10 @@ module.exports = {
     update : async (req, res, next) => {
         try {
                 const {webtoonId} = req.params
-                console.log(req.body)
                 const webtoon = await Webtoon.findByIdAndUpdate(webtoonId, 
                     {
                     title : req.body.title, 
-                    updatedAt :Date().slice(4, 24).toString(), 
+                    updatedAt :Date.now(), 
                     genre : req.body.genre }, 
                     {new : true}
                     )

@@ -6,53 +6,45 @@ import {
     Image,
     StyleSheet, 
     Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator
  } from 'react-native';
  import Icon from 'react-native-vector-icons/FontAwesome5'
 import HeaderComp from '../component/header/HeaderComp';
 import { getUserToken, getUserId } from '../function/api';
-import axios from 'axios'
+import { connect } from 'react-redux'
+import { getUserWebtoon } from '../redux/action/WebtoonAction'
 import Host from '../environment/Host'
 const height = Dimensions.get("window").height
 const width = Dimensions.get("window").width
 
-export default class WebtoonCreation extends Component {
-    constructor() {
-        super() 
-        this.state = {
-            data : null
-        }
-    }
+class WebtoonCreation extends Component {
 
     async componentDidMount() {
         const userToken = await getUserToken()
         const userId = await getUserId()
-            if(userToken) {
-                const response = await axios.get(`${Host.localhost}/webtoons/${userId}`, 
-                        {
-                            headers: {"Authorization" : `Bearer ${userToken}`}
-                        }
-                    )
-                this.setState({data : response.data})
-            
-        }
+        await this.props.getUserWebtoon(userToken, userId)
     }
     render() {
         return (
             <View style={{flex : 1}}>
                 <HeaderComp title="My Webtoon" onPressBack={() => this.props.navigation.goBack()}/>
+                {this.props.webtoon.isLoading ? 
+                <ActivityIndicator/> : 
+                this.props.webtoon.webtoonData.length > 0 ? 
+                <View style={{flex :1}}>
                 <FlatList
-                    data={this.state.data}
+                    data={this.props.webtoon.webtoonData}
                     showsVerticalScrollIndicator={false}
                     renderItem={({item}) =>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('EditMyWebtoon', {dataEdit : item})}>
                         <View style={styles.wrapContainerFlatlist}>
                             <View style={styles.borderImage}>
-                                <Image style={styles.imageDilist} source={{uri : `${Host.imageHost}${item.episodes[0].episodesContent[0]}`}}/>
+                                <Image style={styles.imageDilist} source={{uri : `${Host.imageHost}${item.coverImage}`}}/>
                             </View>
                             <View style={styles.infoComic}>
-                                <Text style={styles.textInfoComic}>{item.webtoonTitle}</Text>
-                                <Text>{item.episodes.length} episode {item.episodes.length > 1 ? <Text>(s)</Text> : null}</Text>
+                                <Text style={styles.textInfoComic}>{item.title}</Text>
+                                <Text>{item.episodes} episode {item.episodes.length > 1 ? <Text>(s)</Text> : null}</Text>
                             </View>
                         </View>
                     </TouchableOpacity>
@@ -63,12 +55,36 @@ export default class WebtoonCreation extends Component {
                     <Icon style={styles.icon} color="#443737" name="plus-circle"
                     onPress={() => this.props.navigation.navigate('CreateWebtoon')}
                     />
+                </View> 
                 </View>
-
+                : 
+                <View style={{flex : 1,justifyContent :"center", alignItems : "center"}}>
+                    <Icon name="book-dead" style={{color : '#443737',fontSize : 80}}/>
+                    <Text style={{fontSize: 20}}>
+                        Kamu belum memiliki webtoon
+                    </Text>
+                    <View style={{position:'absolute',bottom:10,alignSelf:'flex-end', padding :25}}>
+                    <Icon style={styles.icon} color="#443737" name="plus-circle"
+                    onPress={() => this.props.navigation.navigate('CreateWebtoon')}
+                    />
+                </View>
+                </View> }
+                
             </View>
         );
     }
 }
+
+function mapStateToProps(state) {
+    return {
+      webtoon: state.webtoonReducer
+    };
+  }
+
+export default connect(
+    mapStateToProps,
+    { getUserWebtoon }
+  )(WebtoonCreation)
 
 const styles = StyleSheet.create({
     imageDilist : {

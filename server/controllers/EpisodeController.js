@@ -2,7 +2,7 @@ const _ = require('lodash')
 
 const Episode = require('../models/Episode')
 const Image = require('../models/Image')
-
+const Webtoon = require('../models/Webtoon')
 
 module.exports = {
     index : async ( req, res ,next) => {
@@ -27,23 +27,26 @@ module.exports = {
     store : async (req, res, next) => {
         try {
             const {webtoonId} = req.params
+            const webtoon = await Webtoon.findById(webtoonId)
             const newEpisode = new Episode(_.pick(req.body, [
                 'title',
             ]))     
             newEpisode.webtoonId = webtoonId
-            newEpisode.createdAt = Date().slice(4, 24).toString()
-            newEpisode.updatedAt = Date().slice(4, 24).toString()
+            const path = require('path')
+            const remove = path.join(__dirname ,'..', 'public')
+            const thumbnail = req.files[0].path.replace(remove , '')
+            newEpisode.thumbnail = thumbnail
             await newEpisode.save()
-            
+            webtoon.episodes += 1
+            await webtoon.save()
             req.files.map(item => {
                 const newImage = new Image()
-                const path = require('path')
-                const remove = path.join(__dirname ,'..', 'public')
                 let relPath = item.path.replace(remove, '')
                 newImage.uri = relPath
                 newImage.episodeId = newEpisode._id
                 newImage.save()
             })
+            
             res.send(newEpisode)
         }
         catch (err){
@@ -56,9 +59,9 @@ module.exports = {
         try {
             const {episodeId} = req.params
             const episode = await Episode.findById(episodeId)
-            const image = await Image.find({episodeId})
+            // const image = await Image.find({episodeId})
             if(episode) {
-                res.status(200).send({episode, image})
+                res.status(200).send(episode)
             }
             else {
                 res.status(200).send("No data found")
@@ -71,8 +74,11 @@ module.exports = {
     },
     remove : async(req, res, next) => {
         try {
-            const {episodeId} = req.params
+            const {episodeId, webtoonId} = req.params
+            const webtoon = await Webtoon.findById(webtoonId)
+            webtoon.episodes -= 1
             await Episode.findByIdAndDelete(episodeId)
+            await webtoon.save()
             res.status(204).send("Successfully delete episode")
         }
         catch(err) {
@@ -96,7 +102,7 @@ module.exports = {
                 const updatedEpisode = await Episode.findByIdAndUpdate(episodeId, 
                     {
                         title : req.body.title,
-                        updatedAt : Date().slice(4, 24).toString()
+                        updatedAt : Date.now()
                     }, 
                     {new : true, useFindAndModify: false})
                 res.send(updatedEpisode)

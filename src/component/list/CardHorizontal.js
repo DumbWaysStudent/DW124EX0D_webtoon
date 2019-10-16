@@ -7,36 +7,20 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
-
+import Host from '../../environment/Host'
 
 export default class CardHorizontal extends Component {
-    constructor() {
-        super() 
-        this.state = {
-            dataCard :  [{
-                title: 'The Secret of Angel',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-          }, {
-                title: 'Pasutri Gaje',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-          }, {
-                title: 'Young Mom',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-          }]
-        }
-    }
     render() {
-        // const { navigation } = this.props
         return (
             <View >
             <FlatList
-            data={this.state.dataCard}
+            data={this.props.dataCard}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             renderItem={({item}) =>
             <TouchableOpacity onPress={() => this.props.onPressCard(item)}>
-                <View style={{}}>
-                    <Image style={styles.imagelist} source={{uri : item.image}}/>
+                <View style={{marginRight : 5}}>
+                    <Image style={styles.imagelist} source={{uri : `${Host.imageHost}${item.coverImage}`}}/>
                     <View style={{width : 150}}>
                         <Text style={{ textAlign: 'center'}}>{item.title}</Text>
                     </View>
@@ -54,6 +38,7 @@ export default class CardHorizontal extends Component {
 const styles = StyleSheet.create({
     imagelist : {
         width: '100%', 
-        height:150
+        height:130,
+        borderRadius : 5
     }
 })

@@ -34,7 +34,7 @@ export default class SliderImage extends Component {
     return (
       <View>
         <Slideshow
-          height={200}
+          height={170}
           overlay={true}
           arrowSize={0}
           indicatorSelectedColor="#2ce617"

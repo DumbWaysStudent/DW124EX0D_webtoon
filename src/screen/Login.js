@@ -49,7 +49,7 @@ export default class Login extends Component {
             email : this.state.email,
             password : this.state.password
         }
-        const user = await axios.post(`${Host.localhost}/auth` , loginData)
+        const user = await axios.post(`${Host.localhost}/login` , loginData)
         if(user) {
             await AsyncStorage.setItem('userToken', user.data );
                 const objJwt = await jwt.decode(

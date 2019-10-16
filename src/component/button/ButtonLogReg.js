@@ -20,7 +20,7 @@ export class ButtonLogReg extends Component {
 export class ButtonKecil extends Component {
     render() {
         return (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.props.onPressButton}>
                 <View style={styles.buttonKecil}>
                     <Text style={{fontSize : 12,color: 'white' }}>  {this.props.namaButton}</Text>
                 </View>

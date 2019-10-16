@@ -1,29 +1,69 @@
 import React, { Component } from 'react';
 import {StatusBar, StyleSheet, View, Text, ScrollView , Dimensions} from 'react-native';
 import {
-    Container,
     Item,
     Icon,
-    Input
+    Input,
+    Toast,
+    Root
 } from 'native-base'
 import SliderImage from '../component/imageslider/SliderImage'
 import { stylesglobe } from '../constant/styles';
 import CardHorizontal from '../component/list/CardHorizontal';
 import VerticalList from '../component/list/VerticalList';
 
+import {connect} from 'react-redux'
+import {getAllWebtoon} from '../redux/action/allAction'
+import {getUserFav} from '../redux/action/favAction'
+
+import Axios from 'axios';
+import { getUserId, getUserToken } from '../function/api'
+import Host from '../environment/Host';
 
 const height = Dimensions.get("window").height
-export default class Home extends Component {
+class Home extends Component {
     constructor() {
         super() 
         this.state = {
-
+            latestWebtoon : []
         }
+    }
+    async componentDidMount() {
+        const result = await Axios.get(`${Host.localhost}/sortByDate`)
+        this.setState({latestWebtoon : result.data})
+        await this.props.getAllWebtoon()
+        
+    }
+    handleAddFavorit = async(webtoonId) => {
+        
+        const data = {
+            webtoonId
+        }
+        const userId = await getUserId()
+        const userToken = await getUserToken()
+        const result = await Axios.post(`${Host.localhost}/user/${userId}/favorite`,data, 
+                    { headers: {"Authorization" : `Bearer ${userToken}`}}
+                    )
+        let toasttype;
+        if(result.status == 201){
+            toasttype = "success"
+        } else {
+            toasttype = "danger"
+        }
+        Toast.show({
+            text: result.data,
+            buttonText: 'Okay',
+            type : toasttype
+        })
+        await this.props.getUserFav(userId, userToken)
+        
+        
     }
     render() {
         const { navigation } = this.props
 
         return (
+            <Root>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <StatusBar
                 backgroundColor="#443737" />
@@ -31,6 +71,10 @@ export default class Home extends Component {
                     <View style={styles.searchbar}>
                         <Item style={{borderWidth:1}}>
                             <Input
+                            onFocus={() =>
+                                this.props.navigation.navigate("AllWebtoon", {
+                                  autoFocus: true
+                                })}
                             placeholder="Search" />
                             <Icon name="ios-search" />
                         </Item>
@@ -38,28 +82,41 @@ export default class Home extends Component {
                     <SliderImage/>
                     <View style={styles.contFav}>
                         <View style={styles.wrapduajauh}>
-                            <Text style={styles.category}>Favourite</Text>
+                            <Text style={styles.category}>Latest Upload!</Text>
                             <Text>See all</Text>
                         </View>
                         <View style={styles.listhorizontal}>
-                            <CardHorizontal onPressCard={(item) => navigation.navigate('DetailWebtoon', {dataKomik : item})}/>
+                            <CardHorizontal dataCard={this.state.latestWebtoon} onPressCard={(item) => navigation.navigate('DetailWebtoon', {webtoonData : item})}/>
                         </View>
                     </View>
                     <View style={styles.contFav}>
                         <View style={styles.wrapduajauh}>
                             <Text style={styles.category}>All</Text>
-                            <Text>See all</Text>
+                            <Text onPress={()=> this.props.navigation.navigate("AllWebtoon")}>See all</Text>
                         </View>
                         <View style={styles.verticalList}>
-                            <VerticalList onPressList={(item) => navigation.navigate('DetailWebtoon', {dataKomik : item})}/>
+                            <VerticalList handlePressFav={(item) => this.handleAddFavorit(item)} dataCard={this.props.allWebtoon} onPressList={(item) => navigation.navigate('DetailWebtoon', {webtoonData : item})}/>
                         </View>
                     </View>
                 </View>
             </ScrollView>
+            </Root>
            
         );
     }
 }
+
+function mapStateToProps(state) {
+    return {
+      allWebtoon: state.allReducer.allWebtoon
+    };
+  }
+
+
+export default connect(
+    mapStateToProps,
+    { getAllWebtoon , getUserFav}
+  )(Home)
 
 const styles = StyleSheet.create({
     container : {
@@ -67,7 +124,7 @@ const styles = StyleSheet.create({
     },
     category : {
         fontFamily:'Montserrat-SemiBold',
-        fontSize:20
+        fontSize:18
     },
     wrapduajauh : {
         flexDirection: 'row',

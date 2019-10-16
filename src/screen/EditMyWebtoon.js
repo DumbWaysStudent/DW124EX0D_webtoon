@@ -1,54 +1,66 @@
 import React, { Component } from 'react';
 import {Alert, View, Text, TextInput , StyleSheet, Dimensions, FlatList, Image, TouchableOpacity} from 'react-native';
-
 import {
-    Button
+    Button,
 } from 'native-base'
 import HeaderComp from '../component/header/HeaderComp';
 
+import Host from '../environment/Host'
+import { connect } from 'react-redux'
 
-const height = Dimensions.get("window").height
+import {getUserWebtoon, getUserWebtoonEpisode } from '../redux/action/WebtoonAction'
+import { getUserId, getUserToken, deleteWebtoon, editWebtoon } from '../function/api';
+
 const width = Dimensions.get("window").width
 
-export default class EditMyWebtoon extends Component {
+class EditMyWebtoon extends Component {
     constructor() {
         super() 
         this.state = {
             webtoondata : '',
-            episodeList : [{
-                episodes : 1,
-                title: 'The Secret of Angel',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-              }, {
-                episodes : 15,
-                title: 'Pasutri Gaje',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-              }, {
-                episodes : 32,
-                title: 'Young Mom',
-                image: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
-              }]
+            data : {
+                title : '',
+                genre : ''
+            }
+            
         }
     }
-    componentDidMount() {
+    async componentDidMount() {
         const {dataEdit} = this.props.navigation.state.params
-        this.setState({webtoondata : dataEdit })
+        this.setState({webtoondata : dataEdit, 
+            data : {...this.state.data , title : dataEdit.title, genre : dataEdit.genre }})
+        this.updateEpisodeReducer()
     }
-    _handleFinishEditWebtoon = () => {
+
+    updateEpisodeReducer = async () => {
+        const userToken = await getUserToken()
+        await this.props.getUserWebtoonEpisode(userToken, this.state.webtoondata._id)
+    } 
+
+    _handleFinishEditWebtoon =async () => {
+        const userToken = await getUserToken()
+        const userId = await getUserId()
+        await editWebtoon(this.state.data, this.state.webtoondata._id)
+        await this.props.getUserWebtoon(userToken, userId)
         this.props.navigation.navigate('WebtoonCreation')
     }
+
     _handleDeleteWebtoon = () => {
         Alert.alert(
             'Delete this Webtoon ?',
             '',
             [
               {text: 'No', onPress: () => {}},
-              {text: 'Yes', onPress: () => this.props.navigation.navigate('WebtoonCreation')},
+              {text: 'Yes', onPress: async () => {
+                await deleteWebtoon(this.state.webtoondata._id)
+                const userToken = await getUserToken()
+                const userId = await getUserId()
+                this.props.getUserWebtoon(userToken,userId)
+              this.props.navigation.goBack()}
+            },
             ],
             {cancelable: false},
           );
-        // let webtoonId = this.state.webtoondata._id
-        // this.props.navigation.navigate('WebtoonCreation')
     }
     render() {
 
@@ -62,24 +74,24 @@ export default class EditMyWebtoon extends Component {
                         <Text style={styles.titleStyle}>Title</Text>
                         <TextInput
                         style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                        onChangeText={text => this.setState({ webtoondata : {...this.state.webtoondata,title : text}})}
-                        value={this.state.webtoondata.title}
+                        onChangeText={text => this.setState({data : { ...this.state.data,title : text} })}
+                        value={this.state.data.title}
                         />
                     </View>
                     <View style={styles.episodeCont}>
                         <Text style={styles.titleStyle}>Episode</Text>
                         <FlatList
-                            data={this.state.episodeList}
+                            data={this.props.webtoon.episodesData}
                             showsVerticalScrollIndicator={false}
                             renderItem={({item}) =>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('EditEpisodeScreen', {dataEpisode : item})}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('EditEpisodeScreen', {dataEpisode : item, webtoonId: this.state.webtoondata._id, updateData : this.updateEpisodeReducer})}>
                                 <View style={styles.wrapContainerFlatlist}>
                                     <View style={styles.borderImage}>
-                                        <Image style={styles.imageDilist} source={{uri : item.image}}/>
+                                        <Image style={styles.imageDilist} source={{uri : `${Host.imageHost}${item.thumbnail}`}}/>
                                     </View>
                                     <View style={styles.infoComic}>
                                         <Text style={styles.textInfoComic}>{item.title}</Text>
-                                        <Text>{item.episodes}</Text>
+                                        <Text>{item.updatedAt.slice(0,10)}</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>
@@ -87,7 +99,7 @@ export default class EditMyWebtoon extends Component {
                             keyExtractor={(item, index) => index.toString()}
                         />
                     </View>
-                    <Button onPress={() => this.props.navigation.navigate('NewEpisode')} style={styles.btnAdd}>
+                    <Button onPress={() => this.props.navigation.navigate('NewEpisode', {webtoonId : this.state.webtoondata._id, updateData: this.updateEpisodeReducer})} style={styles.btnAdd}>
                         <Text style={{color : "white"}}>ADD EPISODE</Text>
                     </Button>
                     <Button onPress={this._handleDeleteWebtoon} style={styles.deleteAdd}>
@@ -98,6 +110,19 @@ export default class EditMyWebtoon extends Component {
         );
     }
 }
+
+
+function mapStateToProps(state) {
+    return {
+      webtoon: state.webtoonReducer
+    };
+  }
+
+export default connect(
+    mapStateToProps,
+    { getUserWebtoon , getUserWebtoonEpisode }
+  )(EditMyWebtoon)
+
 
 const styles = StyleSheet.create({
     container : {
@@ -137,7 +162,8 @@ const styles = StyleSheet.create({
         fontSize : 20
     },
     episodeCont : {
-        paddingTop : 15
+        paddingTop : 15,
+        flex : 1
     },
     btnAdd : {
         marginTop : 20,

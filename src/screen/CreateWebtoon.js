@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput , StyleSheet, Dimensions, FlatList, Image} from 'react-native';
+import { View, Text, TextInput , StyleSheet, Dimensions, Image} from 'react-native';
 
-import {
-    Button
-} from 'native-base'
 import HeaderComp from '../component/header/HeaderComp';
-
+import Icon from 'react-native-vector-icons/FontAwesome5'
 import { connect } from 'react-redux'
-import Host from '../environment/Host';
-import { newWebtoon } from '../function/api';
+import { getUserWebtoon } from '../redux/action/WebtoonAction'
 
+import { newWebtoon, getUserId, getUserToken } from '../function/api';
+import ImagePicker from 'react-native-image-picker'
 const height = Dimensions.get("window").height
 const width = Dimensions.get("window").width
 
@@ -18,23 +16,58 @@ class CreateWebtoon extends Component {
         super() 
         this.state = {
             data : {
-                webtoonTitle : '',
-                episodes : []
+                title : '',
+                genre : '',
+                coverImage : null
             },
             errorMsg : ''
             
         }
     }
+
+    handleChoosePhoto = () => {
+        const options = {
+            title: 'Pilih Photo',
+            customButtons: [],
+            storageOptions: {
+              skipBackup: true,
+              path: 'images',
+            },
+          };
+          ImagePicker.showImagePicker(options, response => {
+            if (response.didCancel) {
+              console.log('User cancelled image picker');
+            } else if (response.error) {
+              console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+              console.log('User tapped custom button: ', response.customButton);
+            } else {
+              let tmpPhoto = {
+                uri: response.uri,
+                type: response.type,
+                name: response.fileName,
+              };
+              // You can also display the image using data:
+              // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+              const source = tmpPhoto;
+              this.setState({
+                data : {...this.state.data, coverImage : source}
+            });
+            }
+          });
+      };
+
     _handleFinishWebtoon = async () => {
-        if(this.state.data.webtoonTitle != '') {
-            this.props.episodesData.map(
-                item => this.state.data.episodes.push(item._id)
-                )
-            await newWebtoon(this.state.data)
-            this.props.navigation.navigate('WebtoonCreation')
+        if(this.state.data.title === '' || this.state.data.coverImage=== null) {
+            this.setState({errorMsg : "Title atau image tidak boleh kosong"})
         }
         else {
-            this.setState({errorMsg : "Title tidak boleh kosong"})
+            const userId = await getUserId()
+            const userToken = await getUserToken()
+            await newWebtoon(this.state.data)
+            await this.props.getUserWebtoon(userToken,userId)
+            this.props.navigation.navigate('WebtoonCreation')
+            
         }
         
     }
@@ -49,35 +82,31 @@ class CreateWebtoon extends Component {
                         <Text style={styles.titleStyle}>Title</Text>
                         <TextInput
                         style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                        onChangeText={text => this.setState({ data :{...this.state.data,  webtoonTitle : text}})}
-                        value={this.state.data.webtoonTitle}
+                        onChangeText={text => this.setState({ data :{...this.state.data,  title : text}})}
+                        value={this.state.data.title}
                         />
                         <Text style={styles.errorText}>{this.state.errorMsg}</Text>
-                    </View>
-                    <View style={styles.episodeCont}>
-                        <Text style={styles.titleStyle}>Episode</Text>
-                        <FlatList
-                            data={this.props.episodesData}
-                            showsVerticalScrollIndicator={false}
-                            renderItem={({item}) =>
-                            // <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailEpisode', {dataEpisode : item})}>
-                                <View style={styles.wrapContainerFlatlist}>
-                                    <View style={styles.borderImage}>
-                                        <Image style={styles.imageDilist} source={{uri : `${Host.imageHost}${item.episodesContent[0]}`}}/>
-                                    </View>
-                                    <View style={styles.infoComic}>
-                                        <Text style={styles.textInfoComic}>{item.episodeName}</Text>
-                                        <Text>{item.createdAt}</Text>
-                                    </View>
-                                </View>
-                            // </TouchableOpacity>
-                            }
-                            keyExtractor={(item, index) => index.toString()}
+                        <Text style={styles.titleStyle}>Genre</Text>
+                        <TextInput
+                        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                        onChangeText={text => this.setState({ data :{...this.state.data,  genre : text}})}
+                        value={this.state.data.genre}
                         />
                     </View>
-                    <Button onPress={() => this.props.navigation.navigate('NewEpisode')} style={styles.btnAdd}>
-                        <Text style={{color : "white"}}>ADD EPISODE</Text>
-                    </Button>
+                    <View>
+                        <Text style={styles.titleStyle}>Add webtoon cover</Text>
+                        <View style={{alignItems : "center", marginTop : 30}}>
+                            {this.state.data.coverImage != null ? 
+                            <Image style={{width : 150, height : 150}} source={{uri : this.state.data.coverImage.uri}}/> :
+                            <Icon name="images" size={120}/> 
+                            
+                        }
+                        </View>
+                        <View style={{alignItems : "center"}}>
+                            <Icon onPress={this.handleChoosePhoto} size={30} name="camera"/>
+                        </View>
+                        
+                    </View>
                 </View>    
             </View>
         );
@@ -85,12 +114,12 @@ class CreateWebtoon extends Component {
 }
 function mapStateToProps(state) {
     return {
-      episodesData : state.webtoonReducer.episodesData
+      webtoon : state.webtoonReducer.webtoon
     };
   }
 export default connect(
     mapStateToProps,
-    null
+    {getUserWebtoon}
   )(CreateWebtoon)
 
 
