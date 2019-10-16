@@ -72,16 +72,27 @@ export default class EditEpisodeScreen extends Component {
           });
       };
     _handleFinishEditEpisode = async () => {
-        const formData = new FormData()
-        formData.append("title" , this.state.data.title)
-        if(this.state.data.newImage.length > 0) {
-            this.state.data.newImage.forEach(content => {
-                formData.append("contentImage", content);
-              });
-        }      
-        await editEpisodeWebtoon(formData, this.state.dataEpisode._id, this.state.webtoonId)
-        this.props.navigation.state.params.updateData()
-        this.props.navigation.goBack()
+        if(this.state.data.title !== ""){
+            const formData = new FormData()
+            formData.append("title" , this.state.data.title)
+            if(this.state.data.newImage.length > 0) {
+                this.state.data.newImage.forEach(content => {
+                    formData.append("contentImage", content);
+                });
+            }      
+            await editEpisodeWebtoon(formData, this.state.dataEpisode._id, this.state.webtoonId)
+            this.props.navigation.state.params.updateData()
+            this.props.navigation.goBack()
+        }else {
+            alert("Title tidak boleh kosong")
+        }
+        
+    }
+
+    handleDeleteNewImage = (item) => {
+        const indexItem = this.state.data.newImage.indexOf(item)
+        this.state.data.newImage.splice(indexItem, 1)
+        this.setState({})
     }
 
     handleDeleteStoreImage = async (imageId) => {
@@ -149,7 +160,7 @@ export default class EditEpisodeScreen extends Component {
                                     <Text>
                                         {item.name}
                                     </Text>
-                                    <ButtonKecil namaButton="Delete"/>
+                                    <ButtonKecil onPressButton={() => this.handleDeleteNewImage(item)} namaButton="Delete"/>
                                  </View>
                             </View>
                         </View>

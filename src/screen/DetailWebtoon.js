@@ -17,9 +17,9 @@ const width = Dimensions.get("window").width
 
 
 const shareOptions = {
-    title: 'Title',
-    message: 'Message to share', 
-    url: 'www.example.com',
+    title: 'KOMIKO',
+    message: 'Read this webtoon here', 
+    url: 'http://google.com',
     subject: 'Subject'
   };
 

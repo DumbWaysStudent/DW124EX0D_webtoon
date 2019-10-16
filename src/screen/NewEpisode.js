@@ -32,7 +32,11 @@ export default class NewEpisode extends Component {
         const {webtoonId} = this.props.navigation.state.params
         this.setState({webtoonId})
     }
-
+    handleDeletePhoto = (item) => {
+        const indexItem = this.state.contentImage.indexOf(item)
+        this.state.contentImage.splice(indexItem, 1)
+        this.setState({})
+    }
 
     handleChoosePhoto = () => {
         const options = {
@@ -66,9 +70,16 @@ export default class NewEpisode extends Component {
       };
 
     _handleFinishNewEpisode = async () => {
-        await newEpisode(this.state)
-        this.props.navigation.state.params.updateData();
-        this.props.navigation.goBack()
+        const {contentImage , title} = this.state
+        if(contentImage.length === 0 || title === "") {
+            alert("Isi semua field")
+        }
+        else {
+            await newEpisode(this.state)
+            this.props.navigation.state.params.updateData();
+            this.props.navigation.goBack()
+        }
+  
     }
     render() {
         return (
@@ -94,10 +105,15 @@ export default class NewEpisode extends Component {
                         <View style={{paddingBottom :5}}>
                             <View style={{flexDirection : "row"}}>
                                 <Image style={styles.imageList} source={{uri : item.uri}} />
-                                <View style={{justifyContent : "center"}}>
+                                <View style={{justifyContent : "center", marginLeft : 10}}>
                                     <Text>
                                         {item.name}
                                     </Text>
+                                    <View style={{width : 100}}>
+                                    <Button onPress={() => this.handleDeletePhoto(item)} danger style={{borderRadius : 10 ,justifyContent : "center"}}>
+                                        <Text style={{color : 'white'}}>Delete</Text>
+                                    </Button>
+                                    </View>
                                  </View>
                             </View>
                         </View>   

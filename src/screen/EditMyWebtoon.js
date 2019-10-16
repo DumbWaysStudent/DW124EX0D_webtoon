@@ -38,11 +38,15 @@ class EditMyWebtoon extends Component {
     } 
 
     _handleFinishEditWebtoon =async () => {
-        const userToken = await getUserToken()
-        const userId = await getUserId()
-        await editWebtoon(this.state.data, this.state.webtoondata._id)
-        await this.props.getUserWebtoon(userToken, userId)
-        this.props.navigation.navigate('WebtoonCreation')
+        if (this.state.data.title !== "") {
+            const userToken = await getUserToken()
+            const userId = await getUserId()
+            await editWebtoon(this.state.data, this.state.webtoondata._id)
+            await this.props.getUserWebtoon(userToken, userId)
+            this.props.navigation.navigate('WebtoonCreation')
+        }else {
+            alert("Title tidak boleh kosong")
+        }
     }
 
     _handleDeleteWebtoon = () => {
@@ -62,8 +66,8 @@ class EditMyWebtoon extends Component {
             {cancelable: false},
           );
     }
+    
     render() {
-
         return (
             <View style={styles.container}>
                 <HeaderComp 

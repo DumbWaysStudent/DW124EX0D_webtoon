@@ -4,7 +4,6 @@ import {
     Item,
     Icon,
     Input,
-    Toast,
     Root
 } from 'native-base'
 import SliderImage from '../component/imageslider/SliderImage'
@@ -13,51 +12,12 @@ import CardHorizontal from '../component/list/CardHorizontal';
 import VerticalList from '../component/list/VerticalList';
 
 import {connect} from 'react-redux'
-import {getAllWebtoon} from '../redux/action/allAction'
-import {getUserFav} from '../redux/action/favAction'
+import {getAllWebtoon, getLatestWebtoon} from '../redux/action/allAction'
 
-import Axios from 'axios';
-import { getUserId, getUserToken } from '../function/api'
-import Host from '../environment/Host';
-
-const height = Dimensions.get("window").height
 class Home extends Component {
-    constructor() {
-        super() 
-        this.state = {
-            latestWebtoon : []
-        }
-    }
     async componentDidMount() {
-        const result = await Axios.get(`${Host.localhost}/sortByDate`)
-        this.setState({latestWebtoon : result.data})
-        await this.props.getAllWebtoon()
-        
-    }
-    handleAddFavorit = async(webtoonId) => {
-        
-        const data = {
-            webtoonId
-        }
-        const userId = await getUserId()
-        const userToken = await getUserToken()
-        const result = await Axios.post(`${Host.localhost}/user/${userId}/favorite`,data, 
-                    { headers: {"Authorization" : `Bearer ${userToken}`}}
-                    )
-        let toasttype;
-        if(result.status == 201){
-            toasttype = "success"
-        } else {
-            toasttype = "danger"
-        }
-        Toast.show({
-            text: result.data,
-            buttonText: 'Okay',
-            type : toasttype
-        })
-        await this.props.getUserFav(userId, userToken)
-        
-        
+        await this.props.getLatestWebtoon()
+        await this.props.getAllWebtoon()   
     }
     render() {
         const { navigation } = this.props
@@ -83,10 +43,9 @@ class Home extends Component {
                     <View style={styles.contFav}>
                         <View style={styles.wrapduajauh}>
                             <Text style={styles.category}>Latest Upload!</Text>
-                            <Text>See all</Text>
                         </View>
                         <View style={styles.listhorizontal}>
-                            <CardHorizontal dataCard={this.state.latestWebtoon} onPressCard={(item) => navigation.navigate('DetailWebtoon', {webtoonData : item})}/>
+                            <CardHorizontal dataCard={this.props.latestWebtoon} onPressCard={(item) => navigation.navigate('DetailWebtoon', {webtoonData : item})}/>
                         </View>
                     </View>
                     <View style={styles.contFav}>
@@ -95,7 +54,7 @@ class Home extends Component {
                             <Text onPress={()=> this.props.navigation.navigate("AllWebtoon")}>See all</Text>
                         </View>
                         <View style={styles.verticalList}>
-                            <VerticalList handlePressFav={(item) => this.handleAddFavorit(item)} dataCard={this.props.allWebtoon} onPressList={(item) => navigation.navigate('DetailWebtoon', {webtoonData : item})}/>
+                            <VerticalList dataCard={this.props.allWebtoon} onPressList={(item) => navigation.navigate('DetailWebtoon', {webtoonData : item})}/>
                         </View>
                     </View>
                 </View>
@@ -108,14 +67,15 @@ class Home extends Component {
 
 function mapStateToProps(state) {
     return {
-      allWebtoon: state.allReducer.allWebtoon
+      allWebtoon: state.allReducer.allWebtoon,
+      latestWebtoon : state.allReducer.latestWebtoon
     };
   }
 
 
 export default connect(
     mapStateToProps,
-    { getAllWebtoon , getUserFav}
+    { getAllWebtoon, getLatestWebtoon }
   )(Home)
 
 const styles = StyleSheet.create({

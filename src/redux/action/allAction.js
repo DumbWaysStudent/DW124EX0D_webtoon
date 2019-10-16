@@ -19,3 +19,22 @@ export const getAllWebtoon = () => async(dispatch) => {
 
     }
 }
+
+export const getLatestWebtoon = () => async(dispatch) => {
+    try {
+    const result = await Axios.get(`${Host.localhost}/sortByDate`)
+        if(result) {
+        dispatch({
+            type : "GET_LATEST_WEBTOON",
+            payload : result
+        })
+        }
+    }
+    catch (error) {
+        console.log(error)
+        dispatch({
+            type : "GET_LATEST_WEBTOON_ERROR"
+        })
+
+    }
+}

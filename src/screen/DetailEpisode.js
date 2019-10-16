@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import { View ,Text,Image, FlatList, Dimensions, Share, TouchableOpacity, StyleSheet} from 'react-native';
-import {
-    Button
-} from 'native-base'
 import HeaderComp from '../component/header/HeaderComp';
 import Host from '../environment/Host'
 import {getEpisodeImage} from '../function/api'
@@ -10,9 +7,9 @@ const height = Dimensions.get("window").height
 const width = Dimensions.get("window").width
 
 const shareOptions = {
-    title: 'Title',
-    message: 'Message to share', // Note that according to the documentation at least one of "message" or "url" fields is required
-    url: 'www.example.com',
+    title: 'KOMIKO',
+    message: 'Read this webtoon', 
+    url: 'http://google.com',
     subject: 'Subject'
   };
 

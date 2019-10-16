@@ -11,6 +11,7 @@ const s3 = new aws.S3()
 
 const storage = multer.diskStorage({
     destination : function(req, file, cb) {
+        console.log(req.file)
         const uploadsDir = path.join(__dirname,  '..','public','uploads')
         cb(null , uploadsDir)
     },
