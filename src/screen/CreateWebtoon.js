@@ -5,6 +5,7 @@ import HeaderComp from '../component/header/HeaderComp';
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { connect } from 'react-redux'
 import { getUserWebtoon } from '../redux/action/WebtoonAction'
+import {getAllWebtoon, getLatestWebtoon} from '../redux/action/allAction'
 
 import { newWebtoon, getUserId, getUserToken } from '../function/api';
 import ImagePicker from 'react-native-image-picker'
@@ -66,6 +67,8 @@ class CreateWebtoon extends Component {
             const userToken = await getUserToken()
             await newWebtoon(this.state.data)
             await this.props.getUserWebtoon(userToken,userId)
+            await this.props.getLatestWebtoon()
+            await this.props.getAllWebtoon() 
             this.props.navigation.navigate('WebtoonCreation')
             
         }
@@ -119,7 +122,7 @@ function mapStateToProps(state) {
   }
 export default connect(
     mapStateToProps,
-    {getUserWebtoon}
+    {getUserWebtoon, getAllWebtoon, getLatestWebtoon}
   )(CreateWebtoon)
 
 

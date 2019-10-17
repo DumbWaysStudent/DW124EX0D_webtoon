@@ -8,6 +8,7 @@ import HeaderComp from '../component/header/HeaderComp';
 import Host from '../environment/Host'
 import { connect } from 'react-redux'
 
+import {getAllWebtoon, getLatestWebtoon} from '../redux/action/allAction'
 import {getUserWebtoon, getUserWebtoonEpisode } from '../redux/action/WebtoonAction'
 import { getUserId, getUserToken, deleteWebtoon, editWebtoon } from '../function/api';
 
@@ -43,6 +44,8 @@ class EditMyWebtoon extends Component {
             const userId = await getUserId()
             await editWebtoon(this.state.data, this.state.webtoondata._id)
             await this.props.getUserWebtoon(userToken, userId)
+            await this.props.getLatestWebtoon()
+            await this.props.getAllWebtoon() 
             this.props.navigation.navigate('WebtoonCreation')
         }else {
             alert("Title tidak boleh kosong")
@@ -60,7 +63,9 @@ class EditMyWebtoon extends Component {
                 const userToken = await getUserToken()
                 const userId = await getUserId()
                 this.props.getUserWebtoon(userToken,userId)
-              this.props.navigation.goBack()}
+                await this.props.getLatestWebtoon()
+                await this.props.getAllWebtoon() 
+                this.props.navigation.goBack()}
             },
             ],
             {cancelable: false},
@@ -124,7 +129,7 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    { getUserWebtoon , getUserWebtoonEpisode }
+    { getUserWebtoon , getUserWebtoonEpisode, getAllWebtoon, getLatestWebtoon }
   )(EditMyWebtoon)
 
 
