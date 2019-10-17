@@ -43,7 +43,7 @@ export default class DetailEpisode extends Component {
                     showsVerticalScrollIndicator={false}
                     data={this.state.episodeContent}
                     renderItem={({ item })=> 
-                        <Image style={{width , height : height/3, marginBottom:5}} source={{uri : `${Host.imageHost}${item.uri}`}}/>
+                        <Image style={{width , height, marginBottom:5}} source={{uri : `${Host.imageHost}${item.uri}`}}/>
                     }
                     keyExtractor={(item,index) => index.toString()}
                     />

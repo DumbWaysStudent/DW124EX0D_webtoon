@@ -75,7 +75,7 @@ class Favorit extends Component {
                                 </View>
                                 <View style={styles.infoComic}>
                                     <Text style={styles.textInfoComic}>{item.webtoonId.title}</Text>
-                                    <Text>80 Favourite</Text>
+                                    <Text>{item.webtoonId.favoriteBy} Favourite</Text>
                                 </View>
                             </View>
                             <View style={{justifyContent : "center"}}>

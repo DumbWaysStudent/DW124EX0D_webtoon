@@ -54,7 +54,7 @@ class Home extends Component {
                             <Text onPress={()=> this.props.navigation.navigate("AllWebtoon")}>See all</Text>
                         </View>
                         <View style={styles.verticalList}>
-                            <VerticalList dataCard={this.props.allWebtoon} onPressList={(item) => navigation.navigate('DetailWebtoon', {webtoonData : item})}/>
+                            <VerticalList onPressAll={() => this.props.navigation.navigate('AllWebtoon')} dataCard={this.props.allWebtoon} onPressList={(item) => navigation.navigate('DetailWebtoon', {webtoonData : item})}/>
                         </View>
                     </View>
                 </View>

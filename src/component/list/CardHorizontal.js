@@ -22,7 +22,7 @@ export default class CardHorizontal extends Component {
                 <View style={{marginRight : 5}}>
                     <Image style={styles.imagelist} source={{uri : `${Host.imageHost}${item.coverImage}`}}/>
                     <View style={{width : 150}}>
-                        <Text style={{ textAlign: 'center'}}>{item.title}</Text>
+                        <Text style={{ textAlign: 'left'}}>{item.title}</Text>
                     </View>
                 </View>
             </TouchableOpacity>

@@ -70,7 +70,7 @@ class AllWebtoon extends Component {
     render() {
         return (
             <Root>
-            <View style={stylesglobe.background,stylesglobe.paddingContainer}>
+            <View style={[stylesglobe.background,stylesglobe.paddingContainer, {flex : 1}]}>
                 <View style={styles.searchbar}>
                         <Item style={{borderWidth:1}}>
                             <Input
@@ -81,6 +81,7 @@ class AllWebtoon extends Component {
                         </Item>
                 </View>
                     <FlatList
+                    showsVerticalScrollIndicator={false}
                     data = {this.state.dataSearch}
                     renderItem={({item}) => 
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailWebtoon', {webtoonData : item})}>
@@ -88,6 +89,7 @@ class AllWebtoon extends Component {
                                     <Image style={{width: width/4, height:width/4}} source={{uri : `${Host.imageHost}${item.coverImage}`}}/>
                                     <View style={styles.wrapSubCard}>
                                         <Text style={styles.textTitle}>{item.title}</Text>
+                                        <Text style={styles.textTitle}>Genre : {item.genre}</Text>
                                         <ButtonKecil onPressButton={() => this.handleAddFavorit(item._id)} namaButton="+ Favorite"/>
                                     </View>
                                 </View>

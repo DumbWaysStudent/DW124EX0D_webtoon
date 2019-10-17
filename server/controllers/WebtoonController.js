@@ -6,7 +6,7 @@ const Webtoon = require('../models/Webtoon')
 module.exports = {
     index : async(req, res, next) => {
         try {
-            const allWebtoon = await Webtoon.find({})
+            const allWebtoon = await Webtoon.find({}).populate('createdBy')
                 res.status(200).send(allWebtoon)
         }
         catch(err) {
@@ -52,7 +52,7 @@ module.exports = {
         }
     },
     sortByDate : async(req, res, next) => {
-        await Webtoon.find({}).sort({"createdAt":-1}).exec(function(err, doc) {
+        await Webtoon.find({}).populate('createdBy').sort({"createdAt":-1}).exec(function(err, doc) {
              res.send(doc)
          })
     },

@@ -24,14 +24,14 @@ export default class VerticalList extends Component {
                             <Image style={{borderRadius : 5, width: width/5, height:width/5}} source={{uri : `${Host.imageHost}${item.coverImage}`}}/>
                             <View style={styles.wrapSubCard}>
                                 <Text style={styles.textTitle}>{item.title}</Text>
-                                <Text>{item.updatedAt.slice(0,10)}</Text>
+                                <Text>{item.episodes} Episodes</Text>
                             </View>
                         </View>
                 </TouchableOpacity>
                     )}})
                 
             }
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.props.onPressAll}>
                 <View style={styles.seeAllBtn}>
                     <Text style={{color : 'white'}}>All Webtoon</Text>
                 </View>

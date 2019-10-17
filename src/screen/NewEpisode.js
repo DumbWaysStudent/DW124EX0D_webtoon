@@ -9,6 +9,7 @@ import {
     Image
 } from 'react-native';
 import {
+    Container,
     Button
 } from 'native-base'
 import ImagePicker from 'react-native-image-picker'
@@ -99,7 +100,9 @@ export default class NewEpisode extends Component {
                     </View>
                     <View>
                         <Text style={styles.titleStyle}>Add Images</Text>
-                        <FlatList
+                       
+                    </View>
+                    <FlatList
                         data={this.state.contentImage}
                         renderItem={({ item }) => 
                         <View style={{paddingBottom :5}}>
@@ -120,7 +123,6 @@ export default class NewEpisode extends Component {
                     }
                         keyExtractor={(item,index) => index.toString()}
                         />
-                    </View>
                     <Button onPress={this.handleChoosePhoto} style={styles.btn}>
                         <Text style={styles.txtBtn}>+ IMAGE</Text>
                     </Button>
