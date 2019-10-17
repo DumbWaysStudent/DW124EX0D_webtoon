@@ -19,12 +19,15 @@ This is an application that help you to read and make webtoon easily
 
 ## Features
 * Adding new webtoon
+* Latest Webtoon posted
 * Set favourite webtoon
 * Edit profile 
 * Edit and delete your webtoon that has been published
 
 ## Tech Stack
 * React Native for the Mobile Frontend
+* Express js for Back end
+* MongoDB for database
 
 ## Prerequisites
 * Make sure You had been install NodeJs in your system https://nodejs.org/
