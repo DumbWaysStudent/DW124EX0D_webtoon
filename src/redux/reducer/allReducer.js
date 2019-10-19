@@ -1,8 +1,10 @@
 const initialState = {
     allWebtoon : [],
-    error : false,
+    errorAll : false,
     isAllLoading : true,
-    latestWebtoon : []
+    latestWebtoon : [],
+    isLatestLoading : true,
+    errorLatest : false
 }
 
 const allReducer = (state = initialState, actions) => {
@@ -10,25 +12,38 @@ const allReducer = (state = initialState, actions) => {
         case "GET_ALL_WEBTOON" :
             return {
                 ...state,
+                allWebtoon : actions.payload,
+                isAllLoading : true
+            }
+        case "GET_ALL_WEBTOON_FULFILLED" :
+            return {
+                ...state,
                 allWebtoon : actions.payload.data,
                 isAllLoading : false
             }
-        case "GET_ALL_WEBTOON_ERROR" :
+        case "GET_ALL_WEBTOON_REJECTED" :
             return {
                 ...state,
-                error : true,
+                errorAll : true,
                 isAllLoading : false
             }
+
         case "GET_LATEST_WEBTOON" : 
             return {
                 ...state,
-                latestWebtoon : actions.payload.data
+                latestWebtoon : actions.payload,
             }
-        case "GET_LATEST_WEBTOON_ERROR" :
+        case "GET_LATEST_WEBTOON_FULFILLED" : 
             return {
                 ...state,
-                error : true,
-                isAllLoading : false
+                latestWebtoon : actions.payload.data,
+                isLatestLoading : false
+            }
+        case "GET_LATEST_WEBTOON_REJECTED" :
+            return {
+                ...state,
+                errorLatest : true,
+                isLatestLoading : false
             }   
         default :
             return state

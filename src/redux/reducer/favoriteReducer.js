@@ -1,18 +1,24 @@
 const initialState = {
-    favoritData : [],
+    data : [],
     isLoading : true,
     error : false
 }
 
 const favoriteReducer = (state = initialState, actions) => {
     switch(actions.type) {
-        case "GET_USER_FAV":
+        case "GET_USERFAV":
             return {
                 ...state,
-                favoritData : actions.payload.data,
-                isLoading : false
+                data : actions.payload,
+                isLoading : true
             }
-        case "GET_USER_FAV_ERROR" : 
+        case "GET_USERFAV_FULFILLED":
+            return {
+                ...state,
+                data: actions.payload.data,
+                isLoading: false
+            };
+        case "GET_USERFAV_REJECTED" : 
             return {
                 ...state,
                 isLoading : false,

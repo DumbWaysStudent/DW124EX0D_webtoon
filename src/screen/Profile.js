@@ -64,7 +64,7 @@ class Profile extends Component {
 
 function mapStateToProps(state) {
     return {
-      userData: state.userReducer.userData
+      userData: state.userReducer.data
     };
   }
 

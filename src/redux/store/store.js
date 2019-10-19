@@ -1,5 +1,7 @@
 import { createStore, combineReducers, applyMiddleware} from 'redux'
-import thunkMiddleware from 'redux-thunk'
+
+import promise from 'redux-promise-middleware'
+
 
 import allReducer from '../reducer/allReducer'
 import userReducer from '../reducer/userReducer'
@@ -12,7 +14,7 @@ const reducer = combineReducers({
     favoriteReducer
 })
 
-const store = createStore(reducer , applyMiddleware(thunkMiddleware))
+const store = createStore(reducer , applyMiddleware(promise))
 
 export default store
 

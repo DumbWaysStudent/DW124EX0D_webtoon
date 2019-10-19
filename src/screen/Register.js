@@ -72,7 +72,7 @@ export default class Register extends Component {
         return (
             <View style={[stylesglobe.background, stylesglobe.paddingContainer, {flex :1}]}>
                 <View style={{flex : 2}}>
-                    <Image style={styles.imageLogo} source={require('../assets/image/logo.png')} />
+                    <Image style={styles.imageLogo} source={require('../assets/image/logo.jpg')} />
                 </View>
                 <View style={styles.wrapformfield}>
                     <InputTextX 

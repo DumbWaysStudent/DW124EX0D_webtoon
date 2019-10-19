@@ -33,7 +33,7 @@ class CheckUser extends Component {
       <View style={styles.container}>
         <Image
           style={{width: 300, height: 300 ,justifyContent:"center",alignContent:"center"}}
-          source={require('../assets/image/logo.png')}
+          source={require('../assets/image/logo.jpg')}
         />
       </View>
     );

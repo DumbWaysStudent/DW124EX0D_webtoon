@@ -63,7 +63,7 @@ class Favorit extends Component {
                         </Item>
                 </View>
                 <FlatList
-                    data={this.props.userFav.favoritData}
+                    data={this.props.userFav.data}
                     showsVerticalScrollIndicator={false}
                     renderItem={({item}) =>
                     // {item.title.toLowerCase().}

@@ -7,6 +7,7 @@ export const getUserToken = async() => {
     const userToken = await AsyncStorage.getItem('userToken')
     return userToken   
 }
+
 export const getUserId = async() => {
     const userIdJSON = await AsyncStorage.getItem('userId')
     const userId = JSON.parse(userIdJSON)
