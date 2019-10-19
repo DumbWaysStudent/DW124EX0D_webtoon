@@ -37,7 +37,9 @@ export const newEpisode = async (data) => {
         const {title, contentImage, webtoonId} = data
         formData.append("title", title)
         contentImage.forEach(content => {
-            formData.append("contentImage", content);
+            formData.append("contentImage", {uri: content,
+            type: "image/jpeg",
+            name: `${Date.now()}.jpeg`});
           });
 
         const response = await axios.post(`${Host.localhost}/user/${userId}/webtoon/${webtoonId}/episode`, 

@@ -13,7 +13,7 @@ import {
     Button
 } from 'native-base'
 import Host from '../environment/Host'
-import ImagePicker from 'react-native-image-picker'
+import ImagePicker from 'react-native-image-crop-picker'
 import HeaderComp from '../component/header/HeaderComp';
 import {ButtonKecil} from '../component/button/ButtonLogReg'
 import { getEpisodeImage, deleteEpisode, deleteEpisodeImage, editEpisodeWebtoon } from '../function/api';
@@ -34,50 +34,35 @@ export default class EditEpisodeScreen extends Component {
             }   
         }
     }
-
     async componentDidMount() {
         const {dataEpisode, webtoonId} = this.props.navigation.state.params
         this.setState({dataEpisode, data  :{...this.state.data,title :  dataEpisode.title}, webtoonId})
         const imageData = await getEpisodeImage(dataEpisode._id, webtoonId)
         this.setState({imageData})
     }
+
     handleChoosePhoto = () => {
-        const options = {
-            title: 'Pilih Photo',
-            customButtons: [],
-            storageOptions: {
-              skipBackup: true,
-              path: 'images',
-            },
-          };
-          ImagePicker.showImagePicker(options, response => {
-            if (response.didCancel) {
-              console.log('User cancelled image picker');
-            } else if (response.error) {
-              console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-              console.log('User tapped custom button: ', response.customButton);
-            } else {
-              let tmpPhoto = {
-                uri: response.uri,
-                type: response.type,
-                name: response.fileName,
-              };
-              // You can also display the image using data:
-              // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-              const source = tmpPhoto;
-              this.state.data.newImage.push(source)
-              this.setState({})
-            }
+        ImagePicker.openPicker({
+            multiple: true
+          }).then(images => {
+            console.log(images);
+            images.map((image, id) => {
+                this.state.data.newImage.push(image.path)
+            });
+           
+            this.setState({});
           });
-      };
+        };
+    
     _handleFinishEditEpisode = async () => {
         if(this.state.data.title !== ""){
             const formData = new FormData()
             formData.append("title" , this.state.data.title)
             if(this.state.data.newImage.length > 0) {
                 this.state.data.newImage.forEach(content => {
-                    formData.append("contentImage", content);
+                    formData.append("contentImage",  {uri: content,
+                        type: "image/jpeg",
+                        name: `${Date.now()}.jpeg`});
                 });
             }      
             await editEpisodeWebtoon(formData, this.state.dataEpisode._id, this.state.webtoonId)
@@ -155,7 +140,7 @@ export default class EditEpisodeScreen extends Component {
                         renderItem={({ item }) => 
                         <View style={{paddingBottom : 5}}>
                             <View style={{flexDirection : "row"}}>
-                                <Image style={styles.imageList} source={{uri : item.uri}} />
+                                <Image style={styles.imageList} source={{uri : item}} />
                                 <View style={{paddingLeft : 20, justifyContent : "center"}}>
                                     <Text>
                                         {item.name}

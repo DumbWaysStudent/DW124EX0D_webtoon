@@ -13,16 +13,9 @@ import Host from '../environment/Host'
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 
 class Profile extends Component {
-    constructor() {
-        super() 
-        this.state = {
-            userData : '',
-        }
-    }
-    
     async componentDidMount() {
-        const a = await getUserToken()
-        await this.props.getProfile(a)  
+        const userToken = await getUserToken()
+        await this.props.getProfile(userToken)  
     }
     onPressLogout = async () => {
         try {
@@ -34,9 +27,6 @@ class Profile extends Component {
         };
     }
 
-    
-    
-    
     render() {
         return (
             <View style={{ position : 'relative', backgroundColor:'#f7f7f7', flex : 1}}>
