@@ -5,7 +5,6 @@ import {
     Image,
     Text,
 } from 'react-native';
-
 import {
     Item,
     Label,
@@ -18,7 +17,6 @@ import {ButtonLogReg} from '../component/button/ButtonLogReg';
 import { emailvalid } from '../function/validation';
 
 import AsyncStorage from '@react-native-community/async-storage'
-
 import jwt from "react-native-pure-jwt";
 import axios from 'axios'
 import Host from '../environment/Host'
@@ -31,7 +29,8 @@ export default class Login extends Component {
             email : '',
             password : '',
             iconpsw : "ios-eye-off",
-            shwhidepsw: true
+            shwhidepsw: true,
+            errorMsg : ''
         }
     }
 
@@ -43,8 +42,7 @@ export default class Login extends Component {
         }
     }
     _handleLogin = async() => {
-        
-         try {
+        try {
         const loginData = {
             email : this.state.email,
             password : this.state.password
@@ -64,11 +62,9 @@ export default class Login extends Component {
             }
         }
         catch(error) {
-            console.log(error)
-        }
+                this.setState({errorMsg : "Username atau password salah"})
+            }
     }
-        
-       
 
     render() {
         return (
@@ -94,6 +90,7 @@ export default class Login extends Component {
                             />
                             <Icon onPress={this._handlePswIcon} name={this.state.iconpsw} />
                         </Item>
+                <Text style={{color : 'red'}}>{this.state.errorMsg}</Text>
                 </View>
                 <View style={styles.wrapBtn}>
                     <View style={styles.wrapLupa}>

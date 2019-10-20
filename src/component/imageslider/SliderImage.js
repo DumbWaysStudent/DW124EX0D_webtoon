@@ -10,11 +10,11 @@ export default class SliderImage extends Component {
       position: 1,
       interval: null,
       banners : [{
-        title: 'The Secret of Angel',
-        url: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
+        title: 'One Piece',
+        url: 'https://coverfiles.alphacoders.com/111/thumb-111102.jpg'
       }, {
-        title: 'Pasutri Gaje',
-        url: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
+        title: 'Is The Order A Rabbit?',
+        url: 'https://coverfiles.alphacoders.com/111/thumb-111041.jpg'
       }, {
         title: 'Young Mom',
         url: 'https://akcdn.detik.net.id/community/media/visual/2019/04/03/dac43146-7dd4-49f4-89ca-d81f57b070fc.jpeg?w=770&q=90'
